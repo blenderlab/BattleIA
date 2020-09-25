@@ -24,9 +24,4 @@
   <ItemGroup>
     <ProjectReference Include="..\BattleIA.Common\BattleIA.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System">
-      <HintPath>System</HintPath>
-    </Reference>
-  </ItemGroup>
-</Project>
+  </Project>

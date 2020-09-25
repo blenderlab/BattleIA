@@ -38,9 +38,6 @@ namespace BattleIAserver
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions { FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "WebPages")), RequestPath = "/WebPages" });
 
-            /*var serverAddressesFeature = app.ServerFeatures.Get<IServerAddressesFeature>();
-            System.Diagnostics.Debug.WriteLine($"ADDR: {string.Join(", ", serverAddressesFeature.Addresses)}");
-            Console.WriteLine($"ADDR: {string.Join(", ", serverAddressesFeature.Addresses)}");*/
 
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/websockets?view=aspnetcore-2.2
 
@@ -50,9 +47,6 @@ namespace BattleIAserver
                 KeepAliveInterval = TimeSpan.FromSeconds(30),
                 ReceiveBufferSize = 4 * 1024
             };
-            //webSocketOptions.AllowedOrigins.Add("http://ly0500");
-            //webSocketOptions.AllowedOrigins.Add("wss://ly0500");
-            //webSocketOptions.AllowedOrigins.Add("file://");
 
             app.UseWebSockets(webSocketOptions);
 

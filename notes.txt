@@ -22,13 +22,6 @@ C'est un projet de type console
 N'est plus utilisé / à jour car migré en Visual Studio Code
 
 
-* BattleIA
-----------
-N'est plus utilisé. C'était un projet web, remplacé par le moteur de simulation BattleIAserver.
-/!\ ce qui ne va pas : la base d'authentification est du SQL Server
-
-
-
 Unity 2018.3.5f1 personal
 .NET Core 2.2 SDK
 

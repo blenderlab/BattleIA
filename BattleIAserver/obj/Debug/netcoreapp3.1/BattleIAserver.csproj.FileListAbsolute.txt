@@ -1,8 +1,4 @@
-/home/asthro/Projects/15-Code/BattleIA/BattleIAserver/obj/Debug/netcoreapp3.1/BattleIAserver.csprojAssemblyReference.cache
-/home/asthro/Projects/15-Code/BattleIA/BattleIAserver/obj/Debug/netcoreapp3.1/BattleIAserver.AssemblyInfoInputs.cache
-/home/asthro/Projects/15-Code/BattleIA/BattleIAserver/obj/Debug/netcoreapp3.1/BattleIAserver.AssemblyInfo.cs
 /home/asthro/Projects/15-Code/BattleIA/BattleIAserver/bin/Debug/netcoreapp3.1/settings.json
-/home/asthro/Projects/15-Code/BattleIA/BattleIAserver/bin/Debug/netcoreapp3.1/WebPages/index.html
 /home/asthro/Projects/15-Code/BattleIA/BattleIAserver/bin/Debug/netcoreapp3.1/BattleIAserver
 /home/asthro/Projects/15-Code/BattleIA/BattleIAserver/bin/Debug/netcoreapp3.1/BattleIAserver.deps.json
 /home/asthro/Projects/15-Code/BattleIA/BattleIAserver/bin/Debug/netcoreapp3.1/BattleIAserver.runtimeconfig.json
@@ -69,6 +65,9 @@
 /home/asthro/Projects/15-Code/BattleIA/BattleIAserver/bin/Debug/netcoreapp3.1/runtimes/win-x86/nativeassets/netcoreapp2.2/aspnetcorev2_inprocess.dll
 /home/asthro/Projects/15-Code/BattleIA/BattleIAserver/bin/Debug/netcoreapp3.1/BattleIA.Common.dll
 /home/asthro/Projects/15-Code/BattleIA/BattleIAserver/bin/Debug/netcoreapp3.1/BattleIA.Common.pdb
+/home/asthro/Projects/15-Code/BattleIA/BattleIAserver/obj/Debug/netcoreapp3.1/BattleIAserver.csprojAssemblyReference.cache
+/home/asthro/Projects/15-Code/BattleIA/BattleIAserver/obj/Debug/netcoreapp3.1/BattleIAserver.AssemblyInfoInputs.cache
+/home/asthro/Projects/15-Code/BattleIA/BattleIAserver/obj/Debug/netcoreapp3.1/BattleIAserver.AssemblyInfo.cs
 /home/asthro/Projects/15-Code/BattleIA/BattleIAserver/obj/Debug/netcoreapp3.1/BattleIAserver.csproj.CopyComplete
 /home/asthro/Projects/15-Code/BattleIA/BattleIAserver/obj/Debug/netcoreapp3.1/BattleIAserver.dll
 /home/asthro/Projects/15-Code/BattleIA/BattleIAserver/obj/Debug/netcoreapp3.1/BattleIAserver.pdb
