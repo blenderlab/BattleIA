@@ -1,0 +1,20 @@
+﻿{
+  "ServerPort": 4226,
+  "DelayBetweenEachBotTurn": 500,
+  "MapWidth": 32,
+  "MapHeight": 22,
+  "MapPercentWall": 3,
+  "MapPercentEnergy": 5,
+  "EnergyStart": 100,
+  "EnergyLostByTurn": 1,
+  "EnergyLostByShield": 1,
+  "EnergyLostByCloak": 1,
+  "EnergyLostByMove": 1,
+  "EnergyLostShot": 2,
+  "EnergyLostContactWall": 5,
+  "EnergyLostContactEnemy": 15,
+  "PointByTurn": 1,
+  "PointByEnergyFound": 8,
+  "PointByEnnemyTouch": 20,
+  "PointByEnnemyKill": 70
+}

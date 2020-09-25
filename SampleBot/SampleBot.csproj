@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="launch.sh" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="launch.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BattleIA.Common\BattleIA.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BattleIA.Common">
+      <HintPath>..\BattleIA.Common\bin\Debug\netcoreapp2.2\BattleIA.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

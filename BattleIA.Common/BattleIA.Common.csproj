@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>BattleIA</RootNamespace>
+    <Authors>Stéphane Fardoux</Authors>
+    <Company>Yncréa</Company>
+    <Product>BattleIA</Product>
+  </PropertyGroup>
+
+</Project>
