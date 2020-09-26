@@ -109,7 +109,6 @@ namespace BattleIAserver
             try
             {
                 Console.WriteLine("[DISPLAY] Sending MAPINFO");
-
                 await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
             }
             catch (Exception err)
@@ -138,6 +137,8 @@ namespace BattleIAserver
                 System.Diagnostics.Debug.WriteLine($"[DISPLAY ERROR] {err.Message}");
                 MustRemove = true;
             }
+            await SendMapInfo();
+
         }
 
         public async Task SendRemovePlayer(byte x1, byte y1)
