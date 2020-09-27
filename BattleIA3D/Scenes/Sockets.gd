@@ -53,17 +53,24 @@ func _on_data():
 		W = data[3]
 		print (data[1])
 		print (data[3])
-		var c= 4
+		var c= 5
 		var d=0
 		get_node('../terrain').set_terrain_height(H)
 		get_node('../terrain').set_terrain_width(W)
-		for i in range(H):
-			for j in range(W):
+		for i in range(W):
+			for j in range(H):
 				if data[c]==2:
-					get_node('../terrain').addblock(j,i,data[c],d)
+					get_node('../terrain').addBlock(H-j,i,d)
+					d+=1
+				if data[c]==3:
+					get_node('../terrain').addPower(H-j,i,d)
+					d+=1
+				if data[c]==4:
+					get_node('../terrain').addRobot(H-j,i,d)
 					d+=1
 				c=c+1
 			
+
 
 func _process(_delta):
 	# Call this in _process or _physics_process. Data transfer, and signals

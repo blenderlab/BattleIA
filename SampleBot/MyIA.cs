@@ -122,10 +122,10 @@ namespace SampleBot
             }
 
             // on se déplace au hazard
-            //ret = new byte[2];
-            //ret[0] = (byte)BotAction.Move;
-            //ret[1] = (byte)rnd.Next(1, 5);
-            //return ret;
+            ret = new byte[2];
+            ret[0] = (byte)BotAction.Move;
+            ret[1] = (byte)rnd.Next(1, 5);
+            return ret;
 
             ret = new byte[2];
             ret[0] = (byte)BotAction.Move;

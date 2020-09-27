@@ -47,14 +47,36 @@ func generate_terrain():
 			self.multimesh.set_instance_color(index, color)
 			index += 1
 
-func addblock(_i,_j,_type,_c):
+func addBlock(_i,_j,_c):
 	var cube_size = 1	
 	var cube_hs = cube_size / 2.0
 	var origin_distance = 0
-	var origin = Vector3(-self.terrain_w*cube_hs,-self.terrain_h*cube_hs ,cube_size)
+	var origin = Vector3(-self.terrain_w*cube_hs,-self.terrain_h*cube_hs ,-cube_size)
 	var index = self.terrain_w *self.terrain_h+_c
-	var pos = origin + Vector3(_i * cube_size, _j * cube_size,-2*cube_size)
+	var pos = origin + Vector3(self.terrain_w - _j * cube_size, _i * cube_size,0)
 	var color = Color(0.1,0.1,0.1)
 	self.multimesh.set_instance_transform(index,Transform(Basis(),pos) )
 	self.multimesh.set_instance_color(index, color)
 
+func addPower(_i,_j,_c):
+	var cube_size = 1	
+	var cube_hs = cube_size / 2.0
+	var origin_distance = 0
+	var origin = Vector3(-self.terrain_w*cube_hs,-self.terrain_h*cube_hs ,-cube_size)
+	var index = self.terrain_w *self.terrain_h+_c
+	var pos = origin + Vector3(self.terrain_w- _j * cube_size, _i * cube_size,0)
+	var color = Color(0.8,0.4,0.1)
+	self.multimesh.set_instance_transform(index,Transform(Basis(),pos) )
+	self.multimesh.set_instance_color(index, color)
+
+
+func addRobot(_i,_j,_c):
+	var cube_size = 1	
+	var cube_hs = cube_size / 2.0
+	var origin_distance = 0
+	var origin = Vector3(-self.terrain_w*cube_hs,-self.terrain_h*cube_hs ,-cube_size)
+	var index = self.terrain_w *self.terrain_h+_c
+	var pos = origin + Vector3(self.terrain_w - _j * cube_size, _i * cube_size,0)
+	var color = Color(0.1,0.1,0.4)
+	self.multimesh.set_instance_transform(index,Transform(Basis(),pos) )
+	self.multimesh.set_instance_color(index, color)
