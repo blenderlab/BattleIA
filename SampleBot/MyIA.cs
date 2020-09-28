@@ -27,7 +27,9 @@ namespace SampleBot
         bool isFirst = true;
         UInt16 currentShieldLevel = 0;
         bool hasBeenHit = false;
-
+        //my relative position in current scan.
+        int meY = 0;
+        int meX = 0;
 
         List<MoveDirection> route = new List<MoveDirection>();
 
@@ -65,58 +67,21 @@ namespace SampleBot
             if (isFirst)
             {
                 isFirst = false;
-                return 20;
+                return 10;
+            }
+            if (route.Count==0){
+                return 10;
             }
             return 0;
         }
  
- 
- 
- 
-        /// <summary>
-        /// Résultat du scan
-        /// </summary>
-        /// <param name="distance">Distance.</param>
-        /// <param name="informations">Informations.</param>
-        public void AreaInformation(byte distance, byte[] informations)
-        {
-            if (distance == 0){ return; }
-
-            int radar_nrj = 0;
-            int meY = 0;
-            int meX = 0;
-            List<NRJPOINT> NRJ_list = new List<NRJPOINT>();
- 
-            Console.WriteLine($"Area: {distance}");
-            int index = 0;
-            for (int i = 0; i < distance; i++)
-            {
-                for (int j = 0; j < distance; j++)
-                {
-                    if (informations[index] == (byte)CaseState.Energy) { 
-                            radar_nrj++;
-
-                            NRJPOINT n = new NRJPOINT();
-                            n.posx= j;
-                            n.posy= i;
-                            NRJ_list.Add(n);
-
-                    }
-                    if (informations[index] == (byte)CaseState.Ennemy)
-                    {
-                        meX = j;
-                        meY = i;
-                    }
-                    Console.Write(informations[index++]);
-                }
-                Console.WriteLine();
-            }
+        List<MoveDirection> find_nearest_energy(List<NRJPOINT> pliste){
             // Let's compute distance & find the nearest Energy point 
             // pour chaque nrjtpoint appelé 'p' de nrj_list : 
             // distance = valeur absolue (meX - nrjpoint.posx)+ abs(meY-nrjpoint.posy)
             NRJPOINT target = new NRJPOINT();
             target.distance= 9999;
-            foreach (NRJPOINT p in NRJ_list){
+            foreach (NRJPOINT p in pliste){
                 p.get_distance(meX,meY);
                 if (p.distance < target.distance){
                     target = p;
@@ -124,9 +89,7 @@ namespace SampleBot
                     target.posy=target.posy-meY;
 
                 }
-                Console.WriteLine($"{p.posx} {p.posy} = {p.distance}");
-            }
-            Console.WriteLine($"target = x={target.posx} y={target.posy} d={target.distance}");
+              }
       
             // lET'S generate a route : 
             // Est / west  : 
@@ -150,13 +113,50 @@ namespace SampleBot
                     route.Add(MoveDirection.South);
                 }
             } 
-            Console.WriteLine("ROUTE = ");
-            foreach (MoveDirection d in route){
-                Console.WriteLine(d);
+
+            return route;
+        }
+ 
+ 
+ 
+        /// <summary>
+        /// Résultat du scan
+        /// </summary>
+        /// <param name="distance">Distance.</param>
+        /// <param name="informations">Informations.</param>
+        public void AreaInformation(byte distance, byte[] informations)
+        {
+            if (distance == 0){ return; }
+
+            int radar_nrj = 0;
+      
+            List<NRJPOINT> NRJ_list = new List<NRJPOINT>();
+ 
+            Console.WriteLine($"Area: {distance}");
+            int index = 0;
+            for (int i = 0; i < distance; i++)
+            {
+                for (int j = 0; j < distance; j++)
+                {
+                    if (informations[index] == (byte)CaseState.Energy) { 
+                            radar_nrj++;
+                            NRJPOINT n = new NRJPOINT();
+                            n.posx= j;
+                            n.posy= i;
+                            NRJ_list.Add(n);
+                    }
+                    if (informations[index] == (byte)CaseState.Ennemy)
+                    {
+                        meX = j;
+                        meY = i;
+                    }
+                    index++;
+                    //Console.Write(informations[index]);
+                }
+                //Console.WriteLine();
             }
-        //      Console.WriteLine($"NRJ : {radar_nrj}");
-        //     Console.WriteLine($"Me x : {meX}");
-        //     Console.WriteLine($"Me y : {meY}");
+            route = find_nearest_energy(NRJ_list);
+            
         }
  
         //début modif
