@@ -4,7 +4,7 @@
   "MapWidth": 32,
   "MapHeight": 22,
   "MapPercentWall": 3,
-  "MapPercentEnergy": 5,
+  "MapPercentEnergy": 1,
   "EnergyStart": 100,
   "EnergyLostByTurn": 1,
   "EnergyLostByShield": 1,

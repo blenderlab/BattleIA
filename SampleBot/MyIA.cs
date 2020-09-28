@@ -1,23 +1,42 @@
 ﻿using System;
+using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
 using BattleIA;
+using System.Collections;
 using System.Collections.Generic;
-
+ 
+ 
 namespace SampleBot
 {
+    class NRJPOINT
+    {
+        public int posx;
+        public int posy;
+        public int distance;
+
+        public int get_distance(int x, int y){
+            distance = Math.Abs(x-posx)+Math.Abs(y-posy);
+            return distance;
+        }
+    }
+ 
     public class MyIA
     {
-
+ 
         Random rnd = new Random();
-
         bool isFirst = true;
-
         UInt16 currentShieldLevel = 0;
         bool hasBeenHit = false;
 
+
+        List<MoveDirection> route = new List<MoveDirection>();
+
+
         public MyIA()
+
         {
             // setup
-        }
+         }
 
         /// <summary>
         /// Mise à jour des informations
@@ -36,7 +55,7 @@ namespace SampleBot
             }
         }
 
-
+ 
         /// <summary>
         /// On nous demande la distance de scan que l'on veut effectuer
         /// </summary>
@@ -50,7 +69,10 @@ namespace SampleBot
             }
             return 0;
         }
-
+ 
+ 
+ 
+ 
         /// <summary>
         /// Résultat du scan
         /// </summary>
@@ -58,25 +80,97 @@ namespace SampleBot
         /// <param name="informations">Informations.</param>
         public void AreaInformation(byte distance, byte[] informations)
         {
+            if (distance == 0){ return; }
+
+            int radar_nrj = 0;
+            int meY = 0;
+            int meX = 0;
+            List<NRJPOINT> NRJ_list = new List<NRJPOINT>();
+ 
             Console.WriteLine($"Area: {distance}");
             int index = 0;
-            int radarnrj = 0;
-            int[,] listnrj = {{0,0}};
             for (int i = 0; i < distance; i++)
             {
                 for (int j = 0; j < distance; j++)
                 {
-                    if (informations[index]==3){
-                        //listnrj = (int[,]) ResizeArray(listnrj, new int[] { radarnrj++, 2} );
-                        //listnrj[radarnrj++]=new int[] {i,j};
+                    if (informations[index] == (byte)CaseState.Energy) { 
+                            radar_nrj++;
+
+                            NRJPOINT n = new NRJPOINT();
+                            n.posx= j;
+                            n.posy= i;
+                            NRJ_list.Add(n);
+
+                    }
+                    if (informations[index] == (byte)CaseState.Ennemy)
+                    {
+                        meX = j;
+                        meY = i;
                     }
                     Console.Write(informations[index++]);
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine($"Energy found : {radarnrj}");
-        }
+            // Let's compute distance & find the nearest Energy point 
+            // pour chaque nrjtpoint appelé 'p' de nrj_list : 
+            // distance = valeur absolue (meX - nrjpoint.posx)+ abs(meY-nrjpoint.posy)
+            NRJPOINT target = new NRJPOINT();
+            target.distance= 9999;
+            foreach (NRJPOINT p in NRJ_list){
+                p.get_distance(meX,meY);
+                if (p.distance < target.distance){
+                    target = p;
+                    target.posx=target.posx-meX;
+                    target.posy=target.posy-meY;
 
+                }
+                Console.WriteLine($"{p.posx} {p.posy} = {p.distance}");
+            }
+            Console.WriteLine($"target = x={target.posx} y={target.posy} d={target.distance}");
+      
+            // lET'S generate a route : 
+            // Est / west  : 
+            if (target.posx < 0) {
+                for (int i=0; i<Math.Abs(target.posx) ; i++){
+                    route.Add(MoveDirection.East);
+                }
+            }
+            if (target.posx > 0) {
+                for (int i=0; i<Math.Abs(target.posx) ; i++){
+                    route.Add(MoveDirection.West);
+                }
+            } 
+            if (target.posy < 0) {
+                for (int i=0; i<Math.Abs(target.posy) ; i++){
+                    route.Add(MoveDirection.North);
+                }
+            }
+            if (target.posy > 0) {
+                for (int i=0; i<Math.Abs(target.posy) ; i++){
+                    route.Add(MoveDirection.South);
+                }
+            } 
+            Console.WriteLine("ROUTE = ");
+            foreach (MoveDirection d in route){
+                Console.WriteLine(d);
+            }
+        //      Console.WriteLine($"NRJ : {radar_nrj}");
+        //     Console.WriteLine($"Me x : {meX}");
+        //     Console.WriteLine($"Me y : {meY}");
+        }
+ 
+        //début modif
+        public byte[] randommove()
+        {
+            byte[] ret; // ret = tab d'octet
+            ret = new byte[2]; //tableau de taille 2 octet
+            ret[0] = (byte)BotAction.Move;
+            ret[1] = (byte)rnd.Next(1, 5);
+ 
+            return ret;
+        }
+        //fin modif
+ 
         /// <summary>
         /// On dot effectuer une action
         /// </summary>
@@ -84,8 +178,6 @@ namespace SampleBot
         public byte[] GetAction()
         {
             byte[] ret;
-
-
             // nous venons d'être touché
             if (hasBeenHit)
             {
@@ -100,7 +192,7 @@ namespace SampleBot
                     ret[2] = (byte)(currentShieldLevel >> 8);
                     return ret;
                 }
-
+ 
                 hasBeenHit = false;
                 // puis on se déplace fissa, au hazard
                 ret = new byte[2];
@@ -108,7 +200,7 @@ namespace SampleBot
                 ret[1] = (byte)rnd.Next(1, 5);
                 return ret;
             }
-
+ 
             // si pas de bouclier, on en met un en route
             if (currentShieldLevel == 0)
             {
@@ -120,39 +212,38 @@ namespace SampleBot
                 ret[2] = (byte)(currentShieldLevel >> 8);
                 return ret;
             }
-
+ 
+            ret = new byte[2];
+            ret[0] = (byte)BotAction.Move;
+            if (route.Count>0) {
+                ret[1] = (byte)route[0];
+                route.RemoveAt(0);        
+            } else {                
             // on se déplace au hazard
-            ret = new byte[2];
-            ret[0] = (byte)BotAction.Move;
-            ret[1] = (byte)rnd.Next(1, 5);
-            return ret;
-
-            ret = new byte[2];
-            ret[0] = (byte)BotAction.Move;
-            ret[1] = (byte)MoveDirection.North;
-            return ret;
-
+                ret[1] = (byte)rnd.Next(1,5);      
+            }
+ 
             //var ret = new byte[1];
             //ret[0] = (byte)BotAction.None;
-
+ 
             //ret = new byte[2];
             //ret[0] = (byte)BotAction.Move;
             //ret[1] = (byte)MoveDirection.North;
-
+ 
             //var ret = new byte[2];
             //ret[0] = (byte)BotAction.ShieldLevel;
             //ret[1] = 10;
-
+ 
             //var ret = new byte[2];
             //ret[0] = (byte)BotAction.CloackLevel;
             //ret[1] = 20;
-
-            //var ret = new byte[2];
-            //ret[0] = (byte)BotAction.Fire;
-            //ret[1] = (byte)MoveDirection.NorthWest;
-
+ 
+            // ret = new byte[2];
+            // ret[0] = (byte)BotAction.ShieldLevel;
+            // ret[1] = (byte)MoveDirection.North;
+ 
             return ret;
         }
-
+ 
     }
 }
