@@ -1,6 +1,6 @@
 ﻿{
   "ServerPort": 4626,
-  "DelayBetweenEachBotTurn": 500,
+  "DelayBetweenEachBotTurn": 100,
   "MapWidth": 32,
   "MapHeight": 22,
   "MapPercentWall": 3,

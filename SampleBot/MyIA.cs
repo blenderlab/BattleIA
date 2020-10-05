@@ -4,7 +4,8 @@ using System.Reflection.Metadata.Ecma335;
 using BattleIA;
 using System.Collections;
 using System.Collections.Generic;
- 
+using System.Numerics;
+
  
 namespace SampleBot
 {
@@ -27,19 +28,13 @@ namespace SampleBot
         bool isFirst = true;
         UInt16 currentShieldLevel = 0;
         bool hasBeenHit = false;
+        byte scan_length=5;
         //my relative position in current scan.
         int meY = 0;
         int meX = 0;
-
-        List<MoveDirection> route = new List<MoveDirection>();
-
-
-        public MyIA()
-
-        {
-            // setup
-         }
-
+        bool found_something=false;
+        List<MoveDirection> nrj_route = new List<MoveDirection>();
+        NRJPOINT nrj_target = new NRJPOINT();
         /// <summary>
         /// Mise à jour des informations
         /// </summary>
@@ -69,13 +64,20 @@ namespace SampleBot
                 isFirst = false;
                 return 10;
             }
-            if (route.Count==0){
-                return 10;
+            if (!found_something){
+                scan_length+=5;
+            }
+            if (nrj_route.Count==0){
+                return scan_length;
             }
             return 0;
         }
  
-        List<MoveDirection> find_nearest_energy(List<NRJPOINT> pliste){
+        /// <summary>
+        /// Find nearest NRJ node
+        /// </summary>
+        /// <param name="pliste">NRJPONTS list.</param>
+        NRJPOINT find_nearest_energy(List<NRJPOINT> pliste){
             // Let's compute distance & find the nearest Energy point 
             // pour chaque nrjtpoint appelé 'p' de nrj_list : 
             // distance = valeur absolue (meX - nrjpoint.posx)+ abs(meY-nrjpoint.posy)
@@ -84,39 +86,37 @@ namespace SampleBot
             foreach (NRJPOINT p in pliste){
                 p.get_distance(meX,meY);
                 if (p.distance < target.distance){
-                    target = p;
-                    target.posx=target.posx-meX;
-                    target.posy=target.posy-meY;
-
+                    target.posx = p.posx;
+                    target.posy = p.posy;
+                    target.distance=p.distance;
                 }
               }
-      
-            // lET'S generate a route : 
-            // Est / west  : 
-            if (target.posx < 0) {
-                for (int i=0; i<Math.Abs(target.posx) ; i++){
-                    route.Add(MoveDirection.East);
-                }
+            if (target.distance==9999){
+                found_something=false;
+            } else {    
+            found_something=true;
+            scan_length=5;
             }
-            if (target.posx > 0) {
-                for (int i=0; i<Math.Abs(target.posx) ; i++){
-                    route.Add(MoveDirection.West);
-                }
-            } 
-            if (target.posy < 0) {
-                for (int i=0; i<Math.Abs(target.posy) ; i++){
-                    route.Add(MoveDirection.North);
-                }
-            }
-            if (target.posy > 0) {
-                for (int i=0; i<Math.Abs(target.posy) ; i++){
-                    route.Add(MoveDirection.South);
-                }
-            } 
+            return target;
 
-            return route;
         }
- 
+
+      
+        Stack<Node> find_route(NRJPOINT nrj_target,List<List<Node>> map){
+            Stack<Node> r = new Stack<Node>();
+            Astar astar = new Astar(map);
+            Console.WriteLine($"map used : {map}");
+
+            r = astar.FindPath(new Vector2(meX,meY),new Vector2(nrj_target.posx,nrj_target.posy));
+            if (r.Count>0){
+                Console.WriteLine("Found a route ! ");
+                                found_something=true;
+
+            } else {
+                found_something=false;
+            }
+            return r;
+        }
  
  
         /// <summary>
@@ -126,50 +126,114 @@ namespace SampleBot
         /// <param name="informations">Informations.</param>
         public void AreaInformation(byte distance, byte[] informations)
         {
-            if (distance == 0){ return; }
-
+            if (distance <= 1){ return; }
             int radar_nrj = 0;
-      
             List<NRJPOINT> NRJ_list = new List<NRJPOINT>();
- 
-            Console.WriteLine($"Area: {distance}");
+            Console.WriteLine($"Scanning : {distance-1}");
             int index = 0;
+            bool walkable=false;
+            int weight = 0;
+            List<List<Node>> scan = new  List<List<Node>>();
+
             for (int i = 0; i < distance; i++)
             {
+                List<Node> l = new List<Node>();
+                    
                 for (int j = 0; j < distance; j++)
                 {
+                    
                     if (informations[index] == (byte)CaseState.Energy) { 
                             radar_nrj++;
-                            NRJPOINT n = new NRJPOINT();
-                            n.posx= j;
-                            n.posy= i;
-                            NRJ_list.Add(n);
+                            NRJPOINT np = new NRJPOINT();
+                            np.posx= i;
+                            np.posy= j;
+                            NRJ_list.Add(np);
+                            walkable=true;
+                            weight=-1;        
                     }
                     if (informations[index] == (byte)CaseState.Ennemy)
                     {
-                        meX = j;
-                        meY = i;
+                        meX = i;
+                        meY = j;
+                        walkable=true;
+                        weight=0;
                     }
+                    if (informations[index] == (byte)CaseState.Wall)
+                    {
+                        walkable=false;
+                        weight=0;
+                    }
+                    if (informations[index] == (byte)CaseState.Empty)
+                    {
+                        walkable=true;
+                        weight=0;
+                    }
+                    Node n = new Node(new Vector2(i,j),walkable,weight);
+                    l.Add(n);
+
                     index++;
-                    //Console.Write(informations[index]);
+                    //Consn.Position.X} n.Position.X} n.Position.X} {n.Position.Y{n.Position.Y{n.Position.Yole.Write(informations[index]);
                 }
                 //Console.WriteLine();
+                scan.Add(l);
             }
-            route = find_nearest_energy(NRJ_list);
+            nrj_target = find_nearest_energy(NRJ_list);
+            if (nrj_target.posx>0 && nrj_target.posy>0){
+                Console.WriteLine($"New target : {meX-nrj_target.posx} {meY-nrj_target.posy}");
+                Stack<Node> R =  find_route(nrj_target,scan);
+                Console.WriteLine($"Route calculated ...");
+                if (R.Count>0){
+                    nrj_route= build_route(R);           
+                    Console.WriteLine($"and found !");
+
+                } else {
+                    nrj_route.Clear();
+                    Console.WriteLine("No route found....");
+                }
+            } else {
+                nrj_route.Clear();
+                Console.WriteLine("No Target found....");
             
+            }
         }
  
+
+        public List<MoveDirection> build_route(Stack<Node> R){
+                List<MoveDirection> r = new List<MoveDirection>();
+                NRJPOINT from = new NRJPOINT();
+                from.posx= meX;
+                from.posy=meY;
+                
+                foreach(Node N in R){
+                    if ((int)N.Position.X < from.posx){
+                        r.Add(MoveDirection.North);
+                        continue;
+                    }
+                    if ((int)N.Position.X > from.posx){
+                        r.Add(MoveDirection.South);
+                                                continue;
+
+                    }
+                    if ((int)N.Position.Y < from.posy){
+                        r.Add(MoveDirection.East);
+                                                continue;
+
+                    }
+                    if ((int)N.Position.Y > from.posy){
+                        r.Add(MoveDirection.West);
+                                                continue;
+
+                    }
+                    from.posx=(int)N.Position.X;
+                    from.posy=(int)N.Position.Y;
+                    
+                }
+                foreach (MoveDirection d in r){
+                    Console.WriteLine(d);
+                }
+                return(r);
+        }
         //début modif
-        public byte[] randommove()
-        {
-            byte[] ret; // ret = tab d'octet
-            ret = new byte[2]; //tableau de taille 2 octet
-            ret[0] = (byte)BotAction.Move;
-            ret[1] = (byte)rnd.Next(1, 5);
- 
-            return ret;
-        }
-        //fin modif
  
         /// <summary>
         /// On dot effectuer une action
@@ -187,7 +251,7 @@ namespace SampleBot
                     // on en réactive 1 de suite !
                     currentShieldLevel = (byte)rnd.Next(1, 9);
                     ret = new byte[3];
-                    ret[0] = (byte)BotAction.ShieldLevel;
+                      ret[0] = (byte)BotAction.ShieldLevel;
                     ret[1] = (byte)(currentShieldLevel & 0xFF);
                     ret[2] = (byte)(currentShieldLevel >> 8);
                     return ret;
@@ -215,9 +279,9 @@ namespace SampleBot
  
             ret = new byte[2];
             ret[0] = (byte)BotAction.Move;
-            if (route.Count>0) {
-                ret[1] = (byte)route[0];
-                route.RemoveAt(0);        
+            if (nrj_route.Count>0) {
+                ret[1] = (byte)nrj_route[0];
+                nrj_route.RemoveAt(0);        
             } else {                
             // on se déplace au hazard
                 ret[1] = (byte)rnd.Next(1,5);      

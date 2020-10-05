@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <Reference Include="BattleIA.Common">
-      <HintPath>..\BattleIA.Common\bin\Debug\netcoreapp2.2\BattleIA.Common.dll</HintPath>
+      <HintPath>..\BattleIA.Common\bin\Debug\netcoreapp3.1\BattleIA.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
