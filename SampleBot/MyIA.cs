@@ -87,7 +87,6 @@ namespace SampleBot
                     target = p;
                     target.posx=target.posx-meX;
                     target.posy=target.posy-meY;
-
                 }
               }
       
