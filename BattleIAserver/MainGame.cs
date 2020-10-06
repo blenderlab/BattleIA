@@ -463,7 +463,9 @@ namespace BattleIAserver
             {
                 foreach (OneDisplay o in AllViewer)
                 {
-                    o.SendMapInfo();
+                 o.SendMapInfo();
+                 o.SendBotInfo();
+                    
                 }
             }
         }

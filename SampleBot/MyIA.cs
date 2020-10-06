@@ -75,6 +75,8 @@ namespace SampleBot
             return 0;
         }
  
+         public  Random rng = new Random();  
+
         List<MoveDirection> find_nearest_energy(List<NRJPOINT> pliste){
             // Let's compute distance & find the nearest Energy point 
             // pour chaque nrjtpoint appelé 'p' de nrj_list : 
@@ -112,8 +114,17 @@ namespace SampleBot
                     route.Add(MoveDirection.South);
                 }
             } 
+  
+            int n = route.Count;  
+            while (n > 1) {  
+                n--;  
+                int k = rng.Next(n + 1);  
+                MoveDirection value = route[k];  
+                route[k] = route[n];  
+                route[n] = value;  
+            }  
 
-            return route;
+            return route ;
         }
  
  
@@ -127,8 +138,7 @@ namespace SampleBot
         {
             if (distance == 0){ return; }
 
-            int radar_nrj = 0;
-      
+            int radar_nrj = 0;      
             List<NRJPOINT> NRJ_list = new List<NRJPOINT>();
  
             Console.WriteLine($"Area: {distance}");
@@ -150,9 +160,7 @@ namespace SampleBot
                         meY = i;
                     }
                     index++;
-                    //Console.Write(informations[index]);
                 }
-                //Console.WriteLine();
             }
             route = find_nearest_energy(NRJ_list);
             
