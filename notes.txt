@@ -1,10 +1,10 @@
-* Le moteur de simulation
+* Le moteur de simulation (battleIAserver)
 -------------------------
 Projet : BattleIAserver
 C'est un projet de type console
-démarre avec la ligne de commande : dotnet BattleIAserver.dll
-La partie site web n'est pas utilisée.
-Il ouvre une connectique réseau en websocket sur le port 2626
+dÃ©marre avec la ligne de commande : dotnet BattleIAserver.dll
+La partie site web n'est pas utilisÃ©e.
+Il ouvre une connectique rÃ©seau en websocket sur le port 2626
 ws://*:4226/bot			=> pour accueillir les BOTs
 ws://*:4226/cockpit		=> pour le rendu html/css des BOTs
 ws://*:4226/display		=> pour le rendu graphique (fait avec Unity 3D)
@@ -12,31 +12,31 @@ ws://*:4226/display		=> pour le rendu graphique (fait avec Unity 3D)
 
 * BattleIA.Common
 -----------------
-Objets partagés entre les projets
+Objets partagÃ©s entre les projets
 
 
 * BOT exemple
 -------------
 Projet : SampleBot
 C'est un projet de type console
-N'est plus utilisé / à jour car migré en Visual Studio Code
+N'est plus utilisÃ© / Ã  jour car migrÃ© en Visual Studio Code
 
 
 Unity 2018.3.5f1 personal
 .NET Core 2.2 SDK
 
 
-* implémentations des websockets pour le serveur
+* implÃ©mentations des websockets pour le serveur
 
-partie pris : à la moindre anicroche, déconnection pure et simple du client !
+partie pris : Ã  la moindre anicroche, dÃ©connection pure et simple du client !
 
 1/ dans startup.cs
-déclaration des websockets pour asp.net
+dÃ©claration des websockets pour asp.net
 - chaque nouvelle connection de BOT envoi vers MainGame.AddClient()
-on y maintient une List des clients connectés
+on y maintient une List des clients connectÃ©s
 /!\ on fonctionne en thread : donc on lock pour travailler sur la liste ;)
 - chaque nouvelle connection de DISPLAY envoi vers MainGame.AddViewer()
-on y maintient une List des viewers connectés
+on y maintient une List des viewers connectÃ©s
 /!\ on fonctionne en thread : donc on lock pour travailler sur la liste ;)
 - idem pour rendu HTML/CSS avec /COCKPIT
 
@@ -46,58 +46,58 @@ le serveur renvoi OK si le GUID est ok
 1bis/ le bot envoi son nom : Nname
 le bot attend alors son tour
 
-2/ réception de T##eesscc
-## : numéro de tour dans le jeu
+2/ rÃ©ception de T##eesscc
+## : numÃ©ro de tour dans le jeu
 ee : niveau d'energie
 ss : niveau du shield / bouclier
-cc : niveau de cloack / invisibilité
+cc : niveau de cloack / invisibilitÃ©
 
-C'est le démarrage d'un tour de jeu
-Le serveur nous envoi le niveau de nos différents éléments
+C'est le dÃ©marrage d'un tour de jeu
+Le serveur nous envoi le niveau de nos diffÃ©rents Ã©lÃ©ments
 
-pour obtenir la valeur en 16 bit non signé, on fera le calcul suivant
+pour obtenir la valeur en 16 bit non signÃ©, on fera le calcul suivant
 (second octet << 8) + (premier octet)
 
-La réponse a apporter est le niveau de détection que nous voulons effectuer
+La rÃ©ponse a apporter est le niveau de dÃ©tection que nous voulons effectuer
 Nous envoyons le message D#
-avec # pour valeur de 0 à 255
-0 : aucune détection
-1 : détection sur une zone de 1 autour de nous, consomme 1 énergie
-2 : détection sur une zone de 2 autour de nous, consomme 2 énergie
-etc. ... jusqu'à 255
+avec # pour valeur de 0 Ã  255
+0 : aucune dÃ©tection
+1 : dÃ©tection sur une zone de 1 autour de nous, consomme 1 Ã©nergie
+2 : dÃ©tection sur une zone de 2 autour de nous, consomme 2 Ã©nergie
+etc. ... jusqu'Ã  255
 
-3/ réception de I#.......................................
-Il s'agit de la réponse à notre détection
-# est la valeur de zone de détection
-...... est un tableau à 2 dimensions de taille # x #
+3/ rÃ©ception de I#.......................................
+Il s'agit de la rÃ©ponse Ã  notre dÃ©tection
+# est la valeur de zone de dÃ©tection
+...... est un tableau Ã  2 dimensions de taille # x #
 signification de chacune des valeurs
 0 : case vide
 1 : nous / ennemi
 2 : mur infranchissable
-3 : énergie à récupérer (valeur inconnue)
+3 : Ã©nergie Ã  rÃ©cupÃ©rer (valeur inconnue)
 4 : ennemi
 
-La réponse a apporter est l'action que nous voulons effectuer
+La rÃ©ponse a apporter est l'action que nous voulons effectuer
 Si aucune action, envoyer N
-Si déplacement, envoyer M# avec #=direction de 1 à 4 (voir enum)
+Si dÃ©placement, envoyer M# avec #=direction de 1 Ã  4 (voir enum)
 Si protection, envoyer S#
 Si se cacher, envoyer C#
-Si tire sur ennemi, envoyer F# avec #=direction de 1 à 4 (voir enum)
+Si tire sur ennemi, envoyer F# avec #=direction de 1 Ã  4 (voir enum)
 
-4/ réception de Ceesscc
+4/ rÃ©ception de Ceesscc
 Un changement vient d'avoir lieu, voici les nouvelles valeurs
 ee : niveau d'energie
 ss : niveau du shield / bouclier
-cc : niveau de cloack / invisibilité
+cc : niveau de cloack / invisibilitÃ©
 
-5/ réception de D
+5/ rÃ©ception de D
 Le BOT est mort
 
 {50A38383-9A61-42FA-92F2-97CE3ADC426D}
 
 * protocole cockpit
 1 - serveur attend GUID du bot dont on veut les info
-réponse OK du serveur
+rÃ©ponse OK du serveur
 
 2 - Nxxxxx
 C'est le nom du bot
@@ -106,7 +106,7 @@ C'est le nom du bot
 Les infos du bot
 
 4 - I##################
-résultat d'un scan (si > 0)
+rÃ©sultat d'un scan (si > 0)
 
 5 - Pxy
 position du bot sur l'aire de jeu
