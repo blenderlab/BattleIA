@@ -19,6 +19,8 @@ namespace BattleIAserver
         public UInt16 EnergyPodLessValue = 1;
         public UInt16 EnergyPodMin = 10;
 
+        public bool EndlessMode = true;
+
         [Newtonsoft.Json.JsonIgnoreAttribute]
         public UInt16 EnergyPodMax;
 
