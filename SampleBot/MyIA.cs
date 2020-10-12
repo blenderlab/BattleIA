@@ -31,6 +31,7 @@ namespace SampleBot
         int meY = 0;
         int meX = 0;
 
+        NRJPOINT mytarget = new NRJPOINT();
         List<MoveDirection> route = new List<MoveDirection>();
 
 
@@ -77,7 +78,7 @@ namespace SampleBot
  
          public  Random rng = new Random();  
 
-        List<MoveDirection> find_nearest_energy(List<NRJPOINT> pliste){
+        NRJPOINT find_nearest_energy(List<NRJPOINT> pliste){
             // Let's compute distance & find the nearest Energy point 
             // pour chaque nrjtpoint appelé 'p' de nrj_list : 
             // distance = valeur absolue (meX - nrjpoint.posx)+ abs(meY-nrjpoint.posy)
@@ -91,42 +92,38 @@ namespace SampleBot
                     target.posy=target.posy-meY;
                 }
               }
-      
-            // lET'S generate a route : 
+            return (target);
+        }
+
+        List<MoveDirection> find_route(NRJPOINT target){
+
             // Est / west  : 
-            if (target.posx < 0) {
+            if (target.posx < meX) {
                 for (int i=0; i<Math.Abs(target.posx) ; i++){
                     route.Add(MoveDirection.East);
                 }
             }
-            if (target.posx > 0) {
+            if (target.posx > meX) {
                 for (int i=0; i<Math.Abs(target.posx) ; i++){
                     route.Add(MoveDirection.West);
                 }
             } 
-            if (target.posy < 0) {
+            if (target.posy < meY) {
                 for (int i=0; i<Math.Abs(target.posy) ; i++){
                     route.Add(MoveDirection.North);
                 }
             }
-            if (target.posy > 0) {
+            if (target.posy > meY) {
                 for (int i=0; i<Math.Abs(target.posy) ; i++){
                     route.Add(MoveDirection.South);
                 }
             } 
-  
-            int n = route.Count;  
-            while (n > 1) {  
-                n--;  
-                int k = rng.Next(n + 1);  
-                MoveDirection value = route[k];  
-                route[k] = route[n];  
-                route[n] = value;  
-            }  
-
             return route ;
         }
- 
+            
+        private bool check_route(List<MoveDirection> r){
+            return true;
+        }
  
  
         /// <summary>
@@ -162,8 +159,18 @@ namespace SampleBot
                     index++;
                 }
             }
-            route = find_nearest_energy(NRJ_list);
-            
+
+            // Find route for each nrgpoint : 
+            List<List<MoveDirection>> routes = new List<List<MoveDirection>>(); 
+            foreach (NRJPOINT p in NRJ_list){
+              route = find_route(p);
+              if (check_route(route)){
+                routes.Add(route);
+              }
+                  
+            }
+            //mytarget = find_nearest_energy(NRJ_list);
+            //route = find_best_route(mytarget);
         }
  
         //début modif

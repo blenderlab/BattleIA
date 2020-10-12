@@ -96,7 +96,7 @@ namespace BattleIAserver
                         State = BotState.Ready;
                         await SendMessage("OK");
 
-                        MainGame.RefreshViewer();
+                        //MainGame.RefreshViewer();
 
                         SendPositionToCockpit();
                         //await StartNewTurn();
@@ -683,7 +683,7 @@ namespace BattleIAserver
                     break;
             }
             await SendChangeInfo();
-            MainGame.RefreshViewer();
+            //MainGame.RefreshViewer();
             if (bot.Energy == 0)
             {
                 await SendDead();

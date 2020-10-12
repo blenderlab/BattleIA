@@ -433,7 +433,7 @@ namespace BattleIAserver
             if (toRemove != null)
             {
                 ViewerRemovePlayer(toRemove.bot.X, toRemove.bot.Y);
-                RefreshViewer();
+                //RefreshViewer();
             }
             Console.WriteLine($"#bots: {AllBot.Count}");
         }
