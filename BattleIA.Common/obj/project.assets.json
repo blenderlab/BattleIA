@@ -693,11 +693,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/BattleIA.Common.csproj",
+      "projectUniqueName": "/home/asthro/Documents/BattleIA/BattleIA.Common/BattleIA.Common.csproj",
       "projectName": "BattleIA.Common",
-      "projectPath": "/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/BattleIA.Common.csproj",
+      "projectPath": "/home/asthro/Documents/BattleIA/BattleIA.Common/BattleIA.Common.csproj",
       "packagesPath": "/home/asthro/.nuget/packages/",
-      "outputPath": "/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/obj/",
+      "outputPath": "/home/asthro/Documents/BattleIA/BattleIA.Common/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/asthro/.nuget/NuGet/NuGet.Config"
