@@ -1,4 +1,4 @@
-# BattleIABattleIA 
+# BattleIA
 
 BattleIA is a project to teach & learn programming.
 
