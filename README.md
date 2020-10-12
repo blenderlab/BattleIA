@@ -33,6 +33,10 @@ Some examples are available :
   * 3D_Godot : a godot simple base
   * 2D_cli : a Python console viewer
   * 3D_Python : a pygame 3D version
-  
+
+## BattleIA Commons
+
+This project is not a program, but stores every constants & message sizes to ensure a safe communication between programs.
+
 
 
