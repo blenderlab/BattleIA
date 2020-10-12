@@ -167,17 +167,9 @@ namespace BattleIAserver
                 }
                 if (count == 0)
                 {
-                    if(Settings.EndlessMode)
-                    {
-                        // Disabled: Will spam the console until a bot joins.
-                        // Console.WriteLine("Last bot left. Endless mode is active, continuing");
-                    }
-                    else
-                    {
-                        Console.WriteLine("No more BOT, ending simulator.");
-                        turnRunning = false;
-                    }
-                    
+                    Console.WriteLine("No more BOT, ending simulator.");
+                    //Thread.Sleep(500);
+                    turnRunning = false;
                 }
                 else
                 {
