@@ -4,4 +4,6 @@ BattleIAserver/obj/
 SampleBot/obj/
 SampleBot/bin/
 BattleIAviewers/3D_Godot/Output
-
+*.cache
+BattleIA.Common/obj/Debug/netcoreapp2.2/BattleIA.Common.csprojAssemblyReference.cache
+*.cache
