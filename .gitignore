@@ -1,3 +1,6 @@
 BattleIA3D/output
-bin/
-obj/
+BattleIAserver/bin/
+BattleIAserver/obj/
+
+BattleIAviewers/3D_Godot/Output
+

@@ -1,0 +1,15 @@
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/bin/Release/netcoreapp3.1/launch.bat
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/bin/Release/netcoreapp3.1/SampleBot
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/bin/Release/netcoreapp3.1/SampleBot.deps.json
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/bin/Release/netcoreapp3.1/SampleBot.runtimeconfig.json
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/bin/Release/netcoreapp3.1/SampleBot.runtimeconfig.dev.json
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/bin/Release/netcoreapp3.1/SampleBot.dll
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/bin/Release/netcoreapp3.1/SampleBot.pdb
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/bin/Release/netcoreapp3.1/BattleIA.Common.dll
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/bin/Release/netcoreapp3.1/BattleIA.Common.pdb
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/obj/Release/netcoreapp3.1/SampleBot.csprojAssemblyReference.cache
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/obj/Release/netcoreapp3.1/SampleBot.AssemblyInfoInputs.cache
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/obj/Release/netcoreapp3.1/SampleBot.AssemblyInfo.cs
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/obj/Release/netcoreapp3.1/SampleBot.csproj.CopyComplete
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/obj/Release/netcoreapp3.1/SampleBot.dll
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/obj/Release/netcoreapp3.1/SampleBot.pdb
