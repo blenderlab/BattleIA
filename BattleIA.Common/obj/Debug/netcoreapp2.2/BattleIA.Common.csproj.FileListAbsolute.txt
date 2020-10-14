@@ -16,3 +16,12 @@ C:/Users/stephane.fardoux/source/repos/BattleIA/BattleIA.Common/obj/Debug/netcor
 /home/asthro/Documents/BattleIA/BattleIA.Common/bin/Debug/netcoreapp2.2/BattleIA.Common.deps.json
 /home/asthro/Documents/BattleIA/BattleIA.Common/bin/Debug/netcoreapp2.2/BattleIA.Common.dll
 /home/asthro/Documents/BattleIA/BattleIA.Common/bin/Debug/netcoreapp2.2/BattleIA.Common.pdb
+D:\BattleIA forked\BattleIA\BattleIA.Common\bin\Debug\netcoreapp2.2\BattleIA.Common.deps.json
+D:\BattleIA forked\BattleIA\BattleIA.Common\bin\Debug\netcoreapp2.2\BattleIA.Common.dll
+D:\BattleIA forked\BattleIA\BattleIA.Common\bin\Debug\netcoreapp2.2\BattleIA.Common.pdb
+D:\BattleIA forked\BattleIA\BattleIA.Common\obj\Debug\netcoreapp2.2\BattleIA.Common.csprojAssemblyReference.cache
+D:\BattleIA forked\BattleIA\BattleIA.Common\obj\Debug\netcoreapp2.2\BattleIA.Common.AssemblyInfoInputs.cache
+D:\BattleIA forked\BattleIA\BattleIA.Common\obj\Debug\netcoreapp2.2\BattleIA.Common.AssemblyInfo.cs
+D:\BattleIA forked\BattleIA\BattleIA.Common\obj\Debug\netcoreapp2.2\BattleIA.Common.csproj.CoreCompileInputs.cache
+D:\BattleIA forked\BattleIA\BattleIA.Common\obj\Debug\netcoreapp2.2\BattleIA.Common.dll
+D:\BattleIA forked\BattleIA\BattleIA.Common\obj\Debug\netcoreapp2.2\BattleIA.Common.pdb

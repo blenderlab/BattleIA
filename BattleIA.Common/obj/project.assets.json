@@ -688,24 +688,31 @@
     ]
   },
   "packageFolders": {
-    "/home/asthro/.nuget/packages/": {}
+    "C:\\Users\\pierr\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/asthro/Documents/BattleIA/BattleIA.Common/BattleIA.Common.csproj",
+      "projectUniqueName": "D:\\BattleIA forked\\BattleIA\\BattleIA.Common\\BattleIA.Common.csproj",
       "projectName": "BattleIA.Common",
-      "projectPath": "/home/asthro/Documents/BattleIA/BattleIA.Common/BattleIA.Common.csproj",
-      "packagesPath": "/home/asthro/.nuget/packages/",
-      "outputPath": "/home/asthro/Documents/BattleIA/BattleIA.Common/obj/",
+      "projectPath": "D:\\BattleIA forked\\BattleIA\\BattleIA.Common\\BattleIA.Common.csproj",
+      "packagesPath": "C:\\Users\\pierr\\.nuget\\packages\\",
+      "outputPath": "D:\\BattleIA forked\\BattleIA\\BattleIA.Common\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Microsoft\\Xamarin\\NuGet\\"
+      ],
       "configFilePaths": [
-        "/home/asthro/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\pierr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.2"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -739,7 +746,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.108/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

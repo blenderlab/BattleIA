@@ -4,7 +4,7 @@ namespace BattleIAserver
 {
     public class Settings
     {
-        public int ServerPort = 4226;
+        public int ServerPort = 4626;
         public int DelayBetweenEachBotTurn = 100;
         public UInt16 MapWidth = 30;
         public UInt16 MapHeight = 24;
@@ -20,7 +20,6 @@ namespace BattleIAserver
         public UInt16 EnergyPodMin = 10;
 
         public bool EndlessMode = true;
-
         [Newtonsoft.Json.JsonIgnoreAttribute]
         public UInt16 EnergyPodMax;
 

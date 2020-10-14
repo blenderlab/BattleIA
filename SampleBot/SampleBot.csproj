@@ -16,11 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BattleIA.Common\BattleIA.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="BattleIA.Common">
-      <HintPath>..\BattleIA.Common\bin\Debug\netcoreapp2.2\BattleIA.Common.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\BattleIAserver\BattleIAserver.csproj" />
   </ItemGroup>
 </Project>

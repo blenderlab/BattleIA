@@ -15,7 +15,7 @@ namespace SampleBot
         //private static string serverUrl = "ws://ly0500:51973/ia";
         private static string serverUrl = "ws://127.0.0.1:4626/bot";
         private static string botName = "RandomBOT";
-
+        public  static bool auto_respawn = true;
         static void Main(string[] args)
         {
             Console.WriteLine("SampleBot");
@@ -73,7 +73,7 @@ namespace SampleBot
                         {
                             case "O": // OK, rien à faire
                                 if (result.Count != (int)MessageSize.OK) { Console.WriteLine($"[ERROR] wrong size for 'OK': {result.Count}"); break; }
-                                if(!nameIsSent)
+                                if (!nameIsSent)
                                 {
                                     nameIsSent = true;
                                     // sending our name
@@ -101,7 +101,8 @@ namespace SampleBot
                                 await client.SendAsync(new ArraySegment<byte>(answerD), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
                             case "C": // nos infos ont changées
-                                if (result.Count != (int)MessageSize.Change) {
+                                if (result.Count != (int)MessageSize.Change)
+                                {
                                     Console.WriteLine($"[ERROR] wrong size for 'C': {result.Count}");
                                     DebugWriteArray(buffer, result.Count);
                                     break;
@@ -129,7 +130,14 @@ namespace SampleBot
                             case "D":
                                 isDead = true;
                                 Console.WriteLine($"We are dead!");
-                                await client.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+                                await client.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);// Close connection with the last bot
+                                if (auto_respawn)
+                                {
+                                    serverUrl = "ws://127.0.0.1:4626/bot";// new connection to the server for new Bot
+                                    botName = "RandomBOT";// new bot name
+                                    Bot bot = new Bot();
+                                    DoWork().GetAwaiter().GetResult();// recall of this function to wait response of the server
+                                }
                                 break;
                         }
                     } // if count > 1
