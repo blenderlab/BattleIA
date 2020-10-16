@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -13,12 +14,25 @@ namespace SampleBot
         //private static string serverUrl = "wss://10.26.1.182:44367/ia";
         //private static string serverUrl = "wss://ly0500:44367/ia";
         //private static string serverUrl = "ws://ly0500:51973/ia";
-        private static string serverUrl = "ws://127.0.0.1:4626/bot";
-        private static string botName = "RandomBOT";
+
+        private static Settings settings;
 
         static void Main(string[] args)
         {
             Console.WriteLine("SampleBot");
+
+            var currentDir = Directory.GetCurrentDirectory();
+            var configFile = Path.Combine(currentDir, "settings.json");
+            // création du fichier settings.json avec les valeurs par défaut
+            if (!File.Exists(configFile))
+            {
+                settings = new Settings();
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(Program.settings, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText(configFile, json);
+            }
+            var prm = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(File.ReadAllText(configFile));
+            Program.settings = prm;
+
             DoWork().GetAwaiter().GetResult();
             Console.WriteLine("Bye");
             Console.WriteLine("Press [ENTER] to exit.");
@@ -34,7 +48,7 @@ namespace SampleBot
         {
 
             // 1 - connect to server
-
+            var serverUrl = $"ws://{settings.ServerHost}:{settings.ServerPort}/bot";
             var client = new ClientWebSocket();
             Console.WriteLine($"Connecting to {serverUrl}");
             try
@@ -77,8 +91,8 @@ namespace SampleBot
                                 {
                                     nameIsSent = true;
                                     // sending our name
-                                    var bName = Encoding.UTF8.GetBytes("N" + botName);
-                                    Console.WriteLine($"Sending our name: {botName}");
+                                    var bName = Encoding.UTF8.GetBytes("N" + settings.BotName);
+                                    Console.WriteLine($"Sending our name: {settings.BotName}");
                                     await client.SendAsync(new ArraySegment<byte>(bName), WebSocketMessageType.Text, true, CancellationToken.None);
                                     break;
                                 }
