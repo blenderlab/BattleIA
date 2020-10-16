@@ -10,16 +10,12 @@ namespace SampleBot
 {
     class Program
     {
-        //private static string serverUrl = "wss://localhost:44367/ia";
-        //private static string serverUrl = "wss://10.26.1.182:44367/ia";
-        //private static string serverUrl = "wss://ly0500:44367/ia";
-        //private static string serverUrl = "ws://ly0500:51973/ia";
 
         private static Settings settings;
 
         static void Main(string[] args)
         {
-            Console.WriteLine("SampleBot");
+           
 
             var currentDir = Directory.GetCurrentDirectory();
             var configFile = Path.Combine(currentDir, "settings.json");
@@ -32,7 +28,7 @@ namespace SampleBot
             }
             var prm = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(File.ReadAllText(configFile));
             Program.settings = prm;
-
+            Console.WriteLine($"Démarrage du bot: {settings.BotName}");
             DoWork().GetAwaiter().GetResult();
             Console.WriteLine("Bye");
             Console.WriteLine("Press [ENTER] to exit.");
