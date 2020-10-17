@@ -13,7 +13,18 @@
         WaitingAction = 7,
         IsDead = 8,
     }
+    public enum Message : byte
+    {
+        m_dead = (byte)'D',
+        m_mapInfos = (byte)'I',
+        m_OK = (byte)'O',
+        m_yourTurn = (byte)'T',
+        m_newInfos = (byte)'C',
+        m_Map = (byte)'M',
+        m_Position = (byte)'P'
 
+
+    }
     public enum CaseState : byte
     {
         Empty = 0,
