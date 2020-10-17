@@ -1,4 +1,4 @@
-# BattleIA essai push
+# BattleIA
 
 BattleIA is a project to teach & learn programming.
 
