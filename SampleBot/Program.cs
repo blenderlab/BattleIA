@@ -14,7 +14,7 @@ namespace SampleBot
         //private static string serverUrl = "wss://ly0500:44367/ia";
         //private static string serverUrl = "ws://ly0500:51973/ia";
         private static string serverUrl = "ws://127.0.0.1:4626/bot";
-        private static string botName = "RandomBOT";
+        private static string botName = "cacabot";
 
         static void Main(string[] args)
         {
