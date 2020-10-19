@@ -10,7 +10,6 @@ namespace SampleBot
 {
     class Program
     {
-
         private static Settings settings;
 
         static void Main(string[] args)
@@ -33,6 +32,8 @@ namespace SampleBot
             Console.WriteLine("Bye");
             Console.WriteLine("Press [ENTER] to exit.");
             Console.ReadLine();
+
+            var prmBot = Newtonsoft.Json.JsonConvert.DeserializeObject<SettingsBot>(File.ReadAllText(theFile));
         }
 
         private static MyIA ia = new MyIA();
@@ -46,10 +47,10 @@ namespace SampleBot
             // 1 - connect to server
             var serverUrl = $"ws://{settings.ServerHost}:{settings.ServerPort}/bot";
             var client = new ClientWebSocket();
-            Console.WriteLine($"Connecting to {serverUrl}");
+            Console.WriteLine($"Connecting to {SettingsBot.serverUrl}");
             try
             {
-                await client.ConnectAsync(new Uri(serverUrl), CancellationToken.None);
+                await client.ConnectAsync(new Uri(SettingsBot.serverUrl), CancellationToken.None);
             }
             catch (Exception err)
             {
@@ -87,8 +88,10 @@ namespace SampleBot
                                 {
                                     nameIsSent = true;
                                     // sending our name
+
                                     var bName = Encoding.UTF8.GetBytes("N" + settings.BotName);
                                     Console.WriteLine($"Sending our name: {settings.BotName}");
+
                                     await client.SendAsync(new ArraySegment<byte>(bName), WebSocketMessageType.Text, true, CancellationToken.None);
                                     break;
                                 }

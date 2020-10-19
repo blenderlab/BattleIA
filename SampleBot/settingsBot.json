@@ -1,0 +1,5 @@
+//Paramètre de mise en route du bot
+{
+  "botName": "PipBot",
+  "serveurURL": "ws://127.0.0.1:4626/bot"
+}
