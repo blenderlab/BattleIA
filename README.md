@@ -15,8 +15,7 @@ The project is structured in standalone programs, comunicating through WebSocket
 
 The game server. It manage the running of the game, to ensure the bots having the same rules, to give each bot its turn to play...
 
-## SampleBot 
-
+## SampleBot (robot)
 A Bot Template, with no intelligence programmed. The bot has to be coded to complete objectives of the game. The bot is totally blind. It don't see what's around him : walls, energy, ennemy... nor where it is... (sad!)
 
 At his turn, the bot is asked for the distance around him to scan, and the server answer with a map of what's around.  
