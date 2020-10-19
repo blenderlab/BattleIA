@@ -10,6 +10,6 @@ namespace SampleBot
         public int ServerPort = 4626;
 
         public String BotName = "MyBOT";
-
+        public bool autoRespawn = true;//enable auto respawn 
     }
 }
