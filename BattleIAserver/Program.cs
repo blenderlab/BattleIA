@@ -12,9 +12,6 @@ namespace BattleIAserver
         {
 
             var currentDir = Directory.GetCurrentDirectory();
-            var pathToContentRoot = Path.Combine(currentDir, "WebPages");
-            Console.WriteLine($"ContentRoot: {pathToContentRoot}");
-
             var theFile = Path.Combine(currentDir, "settings.json");
             // création du fichier settings.json avec les valeurs par défaut
             if(!File.Exists(theFile))
@@ -28,11 +25,10 @@ namespace BattleIAserver
             MainGame.InitNewMap();
 
             var host = new WebHostBuilder()
-            .UseContentRoot(pathToContentRoot)
             .UseKestrel()
             .UseStartup<Startup>()
             .ConfigureKestrel((context, options) => { options.ListenAnyIP(MainGame.Settings.ServerPort); })
-            .Build();                     //Modify the building per your needs
+            .Build();
 
             host.Start();                     //Start server non-blocking
 
