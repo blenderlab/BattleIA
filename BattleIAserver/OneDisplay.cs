@@ -119,24 +119,26 @@ namespace BattleIAserver
             }
         }
 
-        public async Task SendBotInfo(){
-            var buffer = new byte[2 + MainGame.AllBot.Count*13];
+        public async Task SendBotInfo()
+        {
+            var buffer = new byte[2 + MainGame.AllBot.Count * 13];
             buffer[0] = System.Text.Encoding.ASCII.GetBytes("B")[0];
             buffer[1] = (byte)MainGame.AllBot.Count;
-  
+
             int index = 0;
-            foreach(OneBot oc in MainGame.AllBot)
+            foreach (OneBot oc in MainGame.AllBot)
             {
-                buffer[2+index] = (byte)oc.bot.Energy;
-                buffer[3+index] = (byte)oc.bot.X;
-                buffer[4+index] = (byte)oc.bot.Y;
-                buffer[5+index] = (byte)oc.bot.Score;
-                for (int i=0;i<9;i++){    
-                    buffer[6+index++] = (byte)oc.bot.Name[i];
+                buffer[2 + index] = (byte)oc.bot.Energy;
+                buffer[3 + index] = (byte)oc.bot.X;
+                buffer[4 + index] = (byte)oc.bot.Y;
+                buffer[5 + index] = (byte)oc.bot.Score;
+                for (int i = 0; i < 9; i++)
+                {
+                    buffer[6 + index++] = (byte)oc.bot.Name[i];
                 }
             }
-            
-       
+
+
             try
             {
                 Console.WriteLine("[DISPLAY] Sending BOTINFO");
