@@ -146,7 +146,7 @@ namespace BattleIAserver
             for (int j = 0; j < MainGame.Settings.MapHeight; j++)
                 for (int i = 0; i < MainGame.Settings.MapWidth; i++)
                 {
-                    switch(MainGame.TheMap[i, j])
+                    switch (MainGame.TheMap[i, j])
                     {
                         case CaseState.Wall:
                         case CaseState.Empty:
@@ -188,7 +188,7 @@ namespace BattleIAserver
                 }
                 if (count == 0)
                 {
-                    if(Settings.EndlessMode)
+                    if (Settings.EndlessMode)
                     {
                         // Disabled: Will spam the console until a bot joins.
                         // Console.WriteLine("Last bot left. Endless mode is active, continuing");
@@ -198,7 +198,7 @@ namespace BattleIAserver
                         Console.WriteLine("No more BOT, ending simulator.");
                         turnRunning = false;
                     }
-                    
+
                 }
                 else
                 {
@@ -207,7 +207,7 @@ namespace BattleIAserver
                         Console.WriteLine($"Turn #{turnCount} Bot {bots[i].bot.Name}");
                         await bots[i].StartNewTurn();
                         DateTime start = DateTime.UtcNow;
-                        while((bots[i].State != BotState.Ready) && (DateTime.UtcNow - start).TotalSeconds < Settings.MaxDelaySecondByTurn)
+                        while ((bots[i].State != BotState.Ready) && (DateTime.UtcNow - start).TotalSeconds < Settings.MaxDelaySecondByTurn)
                         {
                             Thread.Sleep(2);
                         }
@@ -221,7 +221,7 @@ namespace BattleIAserver
                     // on génère de l'énergie si nécessaire
                     MainGame.RefuelMap();
                     turnCount++;
-                    if(turnCount % MainGame.Settings.EnergyPodLessEvery == 0)
+                    if (turnCount % MainGame.Settings.EnergyPodLessEvery == 0)
                     {
                         if (Settings.EnergyPodMax > Settings.EnergyPodMin)
                             Settings.EnergyPodMax--;
@@ -396,11 +396,11 @@ namespace BattleIAserver
             {
                 foreach (OneBot o in AllBot)
                 {
-                    if(o.bot.X == ex && o.bot.Y == ey)
+                    if (o.bot.X == ex && o.bot.Y == ey)
                     {
                         if (o.bot.CloakLevel == 0)
                             return CaseState.Ennemy;
-                        if((Math.Abs(ex - px) <= o.bot.CloakLevel) && (Math.Abs(ey - py) <= o.bot.CloakLevel))
+                        if ((Math.Abs(ex - px) <= o.bot.CloakLevel) && (Math.Abs(ey - py) <= o.bot.CloakLevel))
                             return CaseState.Empty;
                         return CaseState.Ennemy;
                     }
@@ -414,7 +414,7 @@ namespace BattleIAserver
         public static void RunSimulator()
         {
             //Thread t = new Thread(DoTurns);
-            if(SimulatorThread.IsAlive)
+            if (SimulatorThread.IsAlive)
             {
                 Console.WriteLine("Simulator is already running.");
                 return;
@@ -487,9 +487,8 @@ namespace BattleIAserver
             {
                 foreach (OneDisplay o in AllViewer)
                 {
-                 o.SendMapInfo();
-                 o.SendBotInfo();
-                    
+                    o.SendMapInfo();
+                    o.SendBotInfo();
                 }
             }
         }
