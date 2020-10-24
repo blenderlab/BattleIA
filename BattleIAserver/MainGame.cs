@@ -30,6 +30,27 @@ namespace BattleIAserver
 
 
         /// <summary>
+        /// Liste des viewers, et lock pour cette liste.
+        /// TODO: Améliorer le système de lock avec un Mutex.
+        /// </summary>
+        private static Object lockListViewer = new Object();
+        public static List<OneDisplay> AllViewer = new List<OneDisplay>();
+
+
+        /// <summary>
+        /// Liste des cockpits, et lock pour cette liste.
+        /// TODO: Améliorer le système de lock avec un Mutex.
+        /// </summary>
+        private static Object lockListCockpit = new Object();
+        public static List<OneCockpit> AllCockpit = new List<OneCockpit>();
+
+
+        /// <summary>
+        /// Sommes-nous dans un tour (?)
+        /// </summary>
+        private static bool turnRunning = false;
+
+        /// <summary>
         /// Création d'un nouveau terrai de simulation, complet
         /// </summary>
         public static void InitNewMap()
@@ -140,7 +161,7 @@ namespace BattleIAserver
         }
 
 
-        private static bool turnRunning = false;
+
 
         /// <summary>
         /// Exécute la simulation dans son ensemble !
@@ -210,8 +231,7 @@ namespace BattleIAserver
             Console.WriteLine("End of running.");
         }
 
-        private static Object lockListCockpit = new Object();
-        public static List<OneCockpit> AllCockpit = new List<OneCockpit>();
+
 
         public static async Task AddCockpit(WebSocket webSocket)
         {
@@ -281,10 +301,6 @@ namespace BattleIAserver
             }
         }
 
-
-
-        private static Object lockListViewer = new Object();
-        public static List<OneDisplay> AllViewer = new List<OneDisplay>();
 
         /// <summary>
         /// Un nouveau VIEWER de la simulation
