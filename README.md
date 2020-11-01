@@ -1,4 +1,4 @@
-# BattleIA
+# BattleIA : a Technologic School Project
 
 BattleIA is a project to teach & learn programming, algorithms, and project management.
 This is a skeletton project without written objectives. The target is to show to the stutdents  all faces on a project.
@@ -38,6 +38,8 @@ The source code has to be forked by each student on its how account, to make all
 
 
 ### Website
+
+Will be hosted on [http://battleia.fr] 
 
 ### Logo & Visuals 
 
