@@ -116,7 +116,7 @@ namespace BattleIAserver
         public static void SendMapInfoToCockpit(Guid guid)
         {
             var buffer = new byte[5 + Settings.MapWidth * MainGame.Settings.MapHeight];
-            buffer[0] = System.Text.Encoding.ASCII.GetBytes("M")[0];
+            buffer[0] = (byte)Message.m_Map;
             buffer[1] = (byte)Settings.MapWidth;
             buffer[2] = (byte)(Settings.MapWidth >> 8);
             buffer[3] = (byte)Settings.MapHeight;
@@ -167,9 +167,16 @@ namespace BattleIAserver
                 }
                 if (count == 0)
                 {
-                    Console.WriteLine("No more BOT, ending simulator.");
-                    //Thread.Sleep(500);
-                    turnRunning = false;
+                      if(Settings.EndlessMode)
+                    {
+                        // Disabled: Will spam the console until a bot joins.
+                        // Console.WriteLine("Last bot left. Endless mode is active, continuing");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No more BOT, ending simulator.");
+                        turnRunning = false;
+                    }
                 }
                 else
                 {

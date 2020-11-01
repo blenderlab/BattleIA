@@ -68,10 +68,10 @@ namespace SampleBot
                 {
                     if (result.Count > 0)
                     {
-                        string command = System.Text.Encoding.UTF8.GetString(buffer, 0, 1);
-                        switch (command)
+                        byte command = buffer[0];
+                        switch ((Message)command)
                         {
-                            case "O": // OK, rien à faire
+                            case Message.m_OK: // OK, rien à faire
                                 if (result.Count != (int)MessageSize.OK) { Console.WriteLine($"[ERROR] wrong size for 'OK': {result.Count}"); break; }
                                 if(!nameIsSent)
                                 {
@@ -84,7 +84,7 @@ namespace SampleBot
                                 }
                                 Console.WriteLine("OK, waiting our turn...");
                                 break;
-                            case "T": // nouveau tour, attend le niveau de détection désiré
+                            case Message.m_yourTurn: // nouveau tour, attend le niveau de détection désiré
                                 if (result.Count != (int)MessageSize.Turn) { Console.WriteLine($"[ERROR] wrong size for 'T': {result.Count}"); DebugWriteArray(buffer, result.Count); break; }
                                 turn = (UInt16)(buffer[1] + (buffer[2] << 8));
                                 bot.Energy = (UInt16)(buffer[3] + (buffer[4] << 8));
@@ -100,7 +100,7 @@ namespace SampleBot
                                 Console.WriteLine($"Sending Scan: {answerD[1]}");
                                 await client.SendAsync(new ArraySegment<byte>(answerD), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
-                            case "C": // nos infos ont changées
+                            case Message.m_newInfos: // nos infos ont changées
                                 if (result.Count != (int)MessageSize.Change) {
                                     Console.WriteLine($"[ERROR] wrong size for 'C': {result.Count}");
                                     DebugWriteArray(buffer, result.Count);
@@ -114,7 +114,7 @@ namespace SampleBot
                                 // nothing to reply
                                 if (bot.Energy == 0) break;
                                 break;
-                            case "I": // info sur détection, attend l'action à effectuer
+                            case Message.m_mapInfos: // info sur détection, attend l'action à effectuer
                                 byte surface = buffer[1];
                                 int all = surface * surface;
                                 if (result.Count != (2 + all)) { Console.WriteLine($"[ERROR] wrong size for 'I': {result.Count}"); break; } // I#+data so 2 + surface :)
@@ -126,7 +126,7 @@ namespace SampleBot
                                 Console.WriteLine($"Sending Action: {(BotAction)answerA[0]}");
                                 await client.SendAsync(new ArraySegment<byte>(answerA), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
-                            case "D":
+                            case Message.m_dead:
                                 isDead = true;
                                 Console.WriteLine($"We are dead!");
                                 await client.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
