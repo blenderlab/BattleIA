@@ -1,9 +1,0 @@
-C:\Users\stephane.fardoux\source\repos\BattleIA\BattleIA.Common\bin\Release\netcoreapp2.2\BattleIA.Common.deps.json
-C:\Users\stephane.fardoux\source\repos\BattleIA\BattleIA.Common\bin\Release\netcoreapp2.2\BattleIA.Common.dll
-C:\Users\stephane.fardoux\source\repos\BattleIA\BattleIA.Common\bin\Release\netcoreapp2.2\BattleIA.Common.pdb
-C:\Users\stephane.fardoux\source\repos\BattleIA\BattleIA.Common\obj\Release\netcoreapp2.2\BattleIA.Common.csprojAssemblyReference.cache
-C:\Users\stephane.fardoux\source\repos\BattleIA\BattleIA.Common\obj\Release\netcoreapp2.2\BattleIA.Common.csproj.CoreCompileInputs.cache
-C:\Users\stephane.fardoux\source\repos\BattleIA\BattleIA.Common\obj\Release\netcoreapp2.2\BattleIA.Common.AssemblyInfoInputs.cache
-C:\Users\stephane.fardoux\source\repos\BattleIA\BattleIA.Common\obj\Release\netcoreapp2.2\BattleIA.Common.AssemblyInfo.cs
-C:\Users\stephane.fardoux\source\repos\BattleIA\BattleIA.Common\obj\Release\netcoreapp2.2\BattleIA.Common.dll
-C:\Users\stephane.fardoux\source\repos\BattleIA\BattleIA.Common\obj\Release\netcoreapp2.2\BattleIA.Common.pdb
