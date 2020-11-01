@@ -1,10 +1,10 @@
-﻿using System;
+﻿using BattleIA;
+using System;
 using System.IO;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BattleIA;
 
 namespace SampleBot
 {
@@ -15,7 +15,7 @@ namespace SampleBot
 
         static void Main(string[] args)
         {
-           
+
 
             var currentDir = Directory.GetCurrentDirectory();
             var configFile = Path.Combine(currentDir, "settings.json");
@@ -83,7 +83,7 @@ namespace SampleBot
                         {
                             case Message.m_OK: // OK, rien à faire
                                 if (result.Count != (int)MessageSize.OK) { Console.WriteLine($"[ERROR] wrong size for 'OK': {result.Count}"); break; }
-                                if(!nameIsSent)
+                                if (!nameIsSent)
                                 {
                                     nameIsSent = true;
                                     // sending our name
@@ -111,7 +111,8 @@ namespace SampleBot
                                 await client.SendAsync(new ArraySegment<byte>(answerD), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
                             case Message.m_newInfos: // nos infos ont changées
-                                if (result.Count != (int)MessageSize.Change) {
+                                if (result.Count != (int)MessageSize.Change)
+                                {
                                     Console.WriteLine($"[ERROR] wrong size for 'C': {result.Count}");
                                     DebugWriteArray(buffer, result.Count);
                                     break;
