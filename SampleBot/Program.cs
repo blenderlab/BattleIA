@@ -1,10 +1,10 @@
-﻿using System;
+﻿using BattleIA;
+using System;
 using System.IO;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BattleIA;
 
 namespace SampleBot
 {
@@ -114,6 +114,7 @@ namespace SampleBot
                             case Message.m_newInfos: // nos infos ont changées
                                 if (result.Count != (int)MessageSize.Change)
                                 {
+
                                     BattleLogger.logger.info($"[ERROR] wrong size for 'C': {result.Count}");
                                     DebugWriteArray(buffer, result.Count);
                                     break;
