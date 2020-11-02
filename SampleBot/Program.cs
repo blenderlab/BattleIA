@@ -138,12 +138,12 @@ namespace SampleBot
                                 await client.SendAsync(new ArraySegment<byte>(answerA), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
                             case Message.m_dead:
-                                isDead = true;
+                                //isDead = true;
                                 Console.WriteLine($"We are dead!");
                                 await client.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);// une fois le bot mort on ferme la connexion au server 
                                 if (settings.autoRespawn)
                                 {
-                                    serverUrl = "ws://127.0.0.1:4626/bot";// on se reconnecte au server 
+                                    //serverUrl = "ws://127.0.0.1:4626/bot";// on se reconnecte au server 
                                     settings.BotName = "RandomBOT";
                                     MyIA ia = new MyIA();
                                     Bot bot = new Bot();
