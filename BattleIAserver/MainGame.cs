@@ -188,15 +188,7 @@ namespace BattleIAserver
                 }
                 if (count == 0)
                 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-                      if(Settings.EndlessMode)
-=======
                     if(Settings.EndlessMode)
->>>>>>> 5102d910d3b5925d381ca3fdeef099246a914f4a
-=======
-                    if (Settings.EndlessMode)
->>>>>>> 4d7f17052155ff54d8d598e087c20d04f2f9a44f
                     {
                         // Disabled: Will spam the console until a bot joins.
                         // Console.WriteLine("Last bot left. Endless mode is active, continuing");
@@ -206,14 +198,6 @@ namespace BattleIAserver
                         Console.WriteLine("No more BOT, ending simulator.");
                         turnRunning = false;
                     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-                    
->>>>>>> 5102d910d3b5925d381ca3fdeef099246a914f4a
-=======
-
->>>>>>> 4d7f17052155ff54d8d598e087c20d04f2f9a44f
                 }
                 else
                 {
