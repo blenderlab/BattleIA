@@ -31,8 +31,8 @@ namespace SampleBot
 
         public Stack<GridPoint> FindPath(Vector2 Start, Vector2 End)
         {
-            GridPoint start = new GridPoint(new Vector2((int)(Start.X/GridPoint.GridPoint_SIZE), (int) (Start.Y/GridPoint.GridPoint_SIZE)), true);
-            GridPoint end = new GridPoint(new Vector2((int)(End.X / GridPoint.GridPoint_SIZE), (int)(End.Y / GridPoint.GridPoint_SIZE)), true);
+            GridPoint start = new GridPoint(new Vector2((int)(Start.X), (int) (Start.Y)), true);
+            GridPoint end = new GridPoint(new Vector2((int)(End.X ), (int)(End.Y )), true);
 
             Stack<GridPoint> Path = new Stack<GridPoint>();
             List<GridPoint> OpenList = new List<GridPoint>();

@@ -122,18 +122,51 @@ namespace SampleBot
                 if (p.DistanceToTarget < target.DistanceToTarget)
                 {
                     target = p;
-                    target.Position.X = target.Position.X - meX;
-                    target.Position.Y = target.Position.Y - meY;
+                    target.Position.X = target.Position.X ;
+                    target.Position.Y = target.Position.Y ;
                 }
             }
             return (target);
         }
 
-        List<MoveDirection> find_route_astar(GridPoint target)
+        List<MoveDirection> find_route_astar(GridPoint target,List<List<GridPoint>> map)
         {
-
+            Astar as_Path = new Astar(map);
+            Stack<GridPoint> solution = new Stack<GridPoint>();
+            solution = as_Path.FindPath(new Vector2(meX,meY), new Vector2(target.Position.X,target.Position.Y ));
+            foreach (GridPoint p in solution){
+                Console.WriteLine(p);
+            }
+            route = build_route(solution);
             return route;
         }
+
+        List<MoveDirection> build_route(Stack<GridPoint> points)
+        {
+            List<MoveDirection> l = new List<MoveDirection>();
+            GridPoint init = new GridPoint(new Vector2(meX,meY));
+
+            foreach (GridPoint p in points) {
+                if (init.Position.X>p.Position.X) {
+                    l.Add(MoveDirection.South);
+                    continue;
+                }
+                if (init.Position.X<p.Position.X) {
+                    l.Add(MoveDirection.North);
+                    continue;
+                }
+                if (init.Position.Y>p.Position.Y) {
+                    l.Add(MoveDirection.West);
+                    continue;
+                }
+                if (init.Position.Y<p.Position.Y) {
+                    l.Add(MoveDirection.East);
+                    continue;
+                }
+            }
+            return l;
+        }
+
 
         List<MoveDirection> find_route(GridPoint target)
         {
@@ -187,36 +220,51 @@ namespace SampleBot
 
             int radar_nrj = 0;
             List<GridPoint> NRJ_list = new List<GridPoint>();
+            List<List<GridPoint>> ScanMap = new List<List<GridPoint>>();
 
             Console.WriteLine($"Area: {distance}");
             int index = 0;
             for (int i = 0; i < distance; i++)
             {
+                List<GridPoint> lineCells = new List<GridPoint>();
                 for (int j = 0; j < distance; j++)
                 {
+                    GridPoint p = new GridPoint(new Vector2(i,j));
+                    // IF point is energy :
                     if (informations[index] == (byte)CaseState.Energy)
                     {
                         radar_nrj++;
-                        GridPoint n = new GridPoint(new Vector2(0,0));
-                        n.Position.X = j;
-                        n.Position.Y = i;
-                        NRJ_list.Add(n);
+                        NRJ_list.Add(p);
+                        p.Walkable=true;
                     }
+                    // If point point is Ennemy 
                     if (informations[index] == (byte)CaseState.Ennemy)
                     {
                         meX = j;
                         meY = i;
+                        p.Walkable=false;
                     }
+                    if (informations[index] == (byte)CaseState.Wall)
+                    {
+                        p.Walkable=false;
+                    }
+                    if (informations[index] == (byte)CaseState.Empty)
+                    {
+                        p.Walkable=true;
+                    } 
                     index++;
+                    lineCells.Add(p);
                 }
+                ScanMap.Add(lineCells);
             }
-
+            
             // Find route for each nrgpoint : 
+            /*
             List<List<MoveDirection>> routes = new List<List<MoveDirection>>();
             foreach (GridPoint p in NRJ_list)
             {
-                route = find_route(p);
-                route = find_route_astar(p);
+                //route = find_route(p);
+                route = find_route_astar(p,ScanMap);
 
                 if (check_route(route))
                 {
@@ -224,8 +272,9 @@ namespace SampleBot
                 }
 
             }
-            //mytarget = find_nearest_energy(NRJ_list);
-            //route = find_best_route(mytarget);
+            */
+            mytarget = find_nearest_energy(NRJ_list);
+            route = find_route_astar(mytarget,ScanMap);
         }
 
         //début modif
