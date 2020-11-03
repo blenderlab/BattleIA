@@ -1,54 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Numerics;
 
-namespace AStarSharp
+namespace SampleBot
 {
-    public class Node
-    {
-        // Change this depending on what the desired size is for each element in the grid
-        public static int NODE_SIZE = 32;
-        public Node Parent;
-        public Vector2 Position;
-        public Vector2 Center
-        {
-            get
-            {
-                return new Vector2(Position.X + NODE_SIZE / 2, Position.Y + NODE_SIZE / 2);
-            }
-        }
-        public float DistanceToTarget;
-        public float Cost;
-        public float Weight;
-        public float F
-        {
-            get
-            {
-                if (DistanceToTarget != -1 && Cost != -1)
-                    return DistanceToTarget + Cost;
-                else
-                    return -1;
-            }
-        }
-        public bool Walkable;
-
-        public Node(Vector2 pos, bool walkable, float weight = 1)
-        {
-            Parent = null;
-            Position = pos;
-            DistanceToTarget = -1;
-            Cost = 1;
-            Weight = weight;
-            Walkable = walkable;
-        }
-    }
 
     public class Astar
     {
-        List<List<Node>> Grid;
+        List<List<GridPoint>> Grid;
         int GridRows
         {
             get
@@ -64,23 +24,23 @@ namespace AStarSharp
             }
         }
 
-        public Astar(List<List<Node>> grid)
+        public Astar(List<List<GridPoint>> grid)
         {
             Grid = grid;
         }
 
-        public Stack<Node> FindPath(Vector2 Start, Vector2 End)
+        public Stack<GridPoint> FindPath(Vector2 Start, Vector2 End)
         {
-            Node start = new Node(new Vector2((int)(Start.X/Node.NODE_SIZE), (int) (Start.Y/Node.NODE_SIZE)), true);
-            Node end = new Node(new Vector2((int)(End.X / Node.NODE_SIZE), (int)(End.Y / Node.NODE_SIZE)), true);
+            GridPoint start = new GridPoint(new Vector2((int)(Start.X/GridPoint.GridPoint_SIZE), (int) (Start.Y/GridPoint.GridPoint_SIZE)), true);
+            GridPoint end = new GridPoint(new Vector2((int)(End.X / GridPoint.GridPoint_SIZE), (int)(End.Y / GridPoint.GridPoint_SIZE)), true);
 
-            Stack<Node> Path = new Stack<Node>();
-            List<Node> OpenList = new List<Node>();
-            List<Node> ClosedList = new List<Node>();
-            List<Node> adjacencies;
-            Node current = start;
+            Stack<GridPoint> Path = new Stack<GridPoint>();
+            List<GridPoint> OpenList = new List<GridPoint>();
+            List<GridPoint> ClosedList = new List<GridPoint>();
+            List<GridPoint> adjacencies;
+            GridPoint current = start;
            
-            // add start node to Open List
+            // add start GridPoint to Open List
             OpenList.Add(start);
 
             while(OpenList.Count != 0 && !ClosedList.Exists(x => x.Position == end.Position))
@@ -88,10 +48,10 @@ namespace AStarSharp
                 current = OpenList[0];
                 OpenList.Remove(current);
                 ClosedList.Add(current);
-                adjacencies = GetAdjacentNodes(current);
+                adjacencies = GetAdjacentGridPoints(current);
 
  
-                foreach(Node n in adjacencies)
+                foreach(GridPoint n in adjacencies)
                 {
                     if (!ClosedList.Contains(n) && n.Walkable)
                     {
@@ -101,7 +61,7 @@ namespace AStarSharp
                             n.DistanceToTarget = Math.Abs(n.Position.X - end.Position.X) + Math.Abs(n.Position.Y - end.Position.Y);
                             n.Cost = n.Weight + n.Parent.Cost;
                             OpenList.Add(n);
-                            OpenList = OpenList.OrderBy(node => node.F).ToList<Node>();
+                            OpenList = OpenList.OrderBy(GridPoint => GridPoint.F).ToList<GridPoint>();
                         }
                     }
                 }
@@ -114,7 +74,7 @@ namespace AStarSharp
             }
 
             // if all good, return path
-            Node temp = ClosedList[ClosedList.IndexOf(current)];
+            GridPoint temp = ClosedList[ClosedList.IndexOf(current)];
             if (temp == null) return null;
             do
             {
@@ -124,9 +84,9 @@ namespace AStarSharp
             return Path;
         }
 		
-        private List<Node> GetAdjacentNodes(Node n)
+        private List<GridPoint> GetAdjacentGridPoints(GridPoint n)
         {
-            List<Node> temp = new List<Node>();
+            List<GridPoint> temp = new List<GridPoint>();
 
             int row = (int)n.Position.Y;
             int col = (int)n.Position.X;
