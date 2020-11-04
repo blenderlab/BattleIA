@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SampleBot
 {
+
     class Program
     {
-
         private static Settings settings;
 
         static void Main(string[] args)

@@ -13,3 +13,4 @@
 /home/asthro/Projects/15-Code/BattleIA/SampleBot/obj/Debug/netcoreapp3.1/SampleBot.csproj.CopyComplete
 /home/asthro/Projects/15-Code/BattleIA/SampleBot/obj/Debug/netcoreapp3.1/SampleBot.dll
 /home/asthro/Projects/15-Code/BattleIA/SampleBot/obj/Debug/netcoreapp3.1/SampleBot.pdb
+/home/asthro/Projects/15-Code/BattleIA/SampleBot/bin/Debug/netcoreapp3.1/Newtonsoft.Json.dll
