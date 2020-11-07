@@ -1,28 +1,58 @@
-﻿using System;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
-using BattleIA;
-using System.Collections;
+﻿using BattleIA;
+using System;
 using System.Collections.Generic;
- 
- 
+using System.Numerics;
+
 namespace SampleBot
 {
-    class NRJPOINT
-    {
-        public int posx;
-        public int posy;
-        public int distance;
 
-        public int get_distance(int x, int y){
-            distance = Math.Abs(x-posx)+Math.Abs(y-posy);
+    
+    public class GridPoint
+    {
+        // Change this depending on what the desired size is for each element in the grid
+        public static int GridPoint_SIZE = 10;
+        public GridPoint Parent;
+        public Vector2 Position;
+        public Vector2 Center
+        {
+            get
+            {
+                return new Vector2(Position.X + GridPoint_SIZE / 2, Position.Y + GridPoint_SIZE / 2);
+            }
+        }
+        public float DistanceToTarget;
+        public float Cost;
+        public float Weight;
+        public float F
+        {
+            get
+            {
+                if (DistanceToTarget != -1 && Cost != -1)
+                    return DistanceToTarget + Cost;
+                else
+                    return -1;
+            }
+        }
+        public bool Walkable;
+        public GridPoint(Vector2 pos, bool walkable=true, float weight = 1)
+        {
+            Parent = null;
+            Position = pos;
+            DistanceToTarget = -1;
+            Cost = 1;
+            Weight = weight;
+            Walkable = walkable;
+        }
+        public int get_distance(int x, int y)
+        {
+            int distance = (int)(Math.Abs(x - Position.X) + Math.Abs(y - Position.Y));
             return distance;
         }
     }
- 
+
     public class MyIA
     {
- 
+
         Random rnd = new Random();
         bool isFirst = true;
         UInt16 currentShieldLevel = 0;
@@ -31,7 +61,7 @@ namespace SampleBot
         int meY = 0;
         int meX = 0;
 
-        NRJPOINT mytarget = new NRJPOINT();
+        GridPoint mytarget = new GridPoint(new Vector2(0,0));
         List<MoveDirection> route = new List<MoveDirection>();
 
 
@@ -39,7 +69,7 @@ namespace SampleBot
 
         {
             // setup
-         }
+        }
 
         /// <summary>
         /// Mise à jour des informations
@@ -58,7 +88,7 @@ namespace SampleBot
             }
         }
 
- 
+
         /// <summary>
         /// On nous demande la distance de scan que l'on veut effectuer
         /// </summary>
@@ -70,62 +100,115 @@ namespace SampleBot
                 isFirst = false;
                 return 10;
             }
-            if (route.Count==0){
+            if (route.Count == 0)
+            {
                 return 10;
             }
             return 0;
         }
- 
-         public  Random rng = new Random();  
 
-        NRJPOINT find_nearest_energy(List<NRJPOINT> pliste){
+        public Random rng = new Random();
+
+        GridPoint find_nearest_energy(List<GridPoint> pliste)
+        {
             // Let's compute distance & find the nearest Energy point 
             // pour chaque nrjtpoint appelé 'p' de nrj_list : 
-            // distance = valeur absolue (meX - nrjpoint.posx)+ abs(meY-nrjpoint.posy)
-            NRJPOINT target = new NRJPOINT();
-            target.distance= 9999;
-            foreach (NRJPOINT p in pliste){
-                p.get_distance(meX,meY);
-                if (p.distance < target.distance){
+            // distance = valeur absolue (meX - GridPoint.posx)+ abs(meY-GridPoint.posy)
+            GridPoint target = new GridPoint(new Vector2(0,0));
+            target.DistanceToTarget = 9999;
+            foreach (GridPoint p in pliste)
+            {
+                p.get_distance(meX, meY);
+                if (p.DistanceToTarget < target.DistanceToTarget)
+                {
                     target = p;
-                    target.posx=target.posx-meX;
-                    target.posy=target.posy-meY;
+                    target.Position.X = target.Position.X ;
+                    target.Position.Y = target.Position.Y ;
                 }
-              }
+            }
             return (target);
         }
 
-        List<MoveDirection> find_route(NRJPOINT target){
+        List<MoveDirection> find_route_astar(GridPoint target,List<List<GridPoint>> map)
+        {
+            Astar as_Path = new Astar(map);
+            Stack<GridPoint> solution = new Stack<GridPoint>();
+            solution = as_Path.FindPath(new Vector2(meX,meY), new Vector2(target.Position.X,target.Position.Y ));
+            foreach (GridPoint p in solution){
+                Console.WriteLine(p);
+            }
+            route = build_route(solution);
+            return route;
+        }
+
+        List<MoveDirection> build_route(Stack<GridPoint> points)
+        {
+            List<MoveDirection> l = new List<MoveDirection>();
+            GridPoint init = new GridPoint(new Vector2(meX,meY));
+
+            foreach (GridPoint p in points) {
+                if (init.Position.X>p.Position.X) {
+                    l.Add(MoveDirection.South);
+                    continue;
+                }
+                if (init.Position.X<p.Position.X) {
+                    l.Add(MoveDirection.North);
+                    continue;
+                }
+                if (init.Position.Y>p.Position.Y) {
+                    l.Add(MoveDirection.West);
+                    continue;
+                }
+                if (init.Position.Y<p.Position.Y) {
+                    l.Add(MoveDirection.East);
+                    continue;
+                }
+            }
+            return l;
+        }
+
+
+        List<MoveDirection> find_route(GridPoint target)
+        {
 
             // Est / west  : 
-            if (target.posx < meX) {
-                for (int i=0; i<Math.Abs(target.posx) ; i++){
+            if (target.Position.X < meX)
+            {
+                for (int i = 0; i < Math.Abs(target.Position.X); i++)
+                {
                     route.Add(MoveDirection.East);
                 }
             }
-            if (target.posx > meX) {
-                for (int i=0; i<Math.Abs(target.posx) ; i++){
+            if (target.Position.X > meX)
+            {
+                for (int i = 0; i < Math.Abs(target.Position.X); i++)
+                {
                     route.Add(MoveDirection.West);
                 }
-            } 
-            if (target.posy < meY) {
-                for (int i=0; i<Math.Abs(target.posy) ; i++){
+            }
+            if (target.Position.Y < meY)
+            {
+                for (int i = 0; i < Math.Abs(target.Position.Y); i++)
+                {
                     route.Add(MoveDirection.North);
                 }
             }
-            if (target.posy > meY) {
-                for (int i=0; i<Math.Abs(target.posy) ; i++){
+            if (target.Position.Y > meY)
+            {
+                for (int i = 0; i < Math.Abs(target.Position.Y); i++)
+                {
                     route.Add(MoveDirection.South);
                 }
-            } 
-            return route ;
+            }
+            return route;
         }
-            
-        private bool check_route(List<MoveDirection> r){
+
+        private bool check_route(List<MoveDirection> r)
+        {
             return true;
         }
- 
- 
+
+
         /// <summary>
         /// Résultat du scan
         /// </summary>
@@ -133,46 +216,67 @@ namespace SampleBot
         /// <param name="informations">Informations.</param>
         public void AreaInformation(byte distance, byte[] informations)
         {
-            if (distance == 0){ return; }
+            if (distance == 0) { return; }
 
-            int radar_nrj = 0;      
-            List<NRJPOINT> NRJ_list = new List<NRJPOINT>();
- 
+            int radar_nrj = 0;
+            List<GridPoint> NRJ_list = new List<GridPoint>();
+            List<List<GridPoint>> ScanMap = new List<List<GridPoint>>();
+
             Console.WriteLine($"Area: {distance}");
             int index = 0;
             for (int i = 0; i < distance; i++)
             {
+                List<GridPoint> lineCells = new List<GridPoint>();
                 for (int j = 0; j < distance; j++)
                 {
-                    if (informations[index] == (byte)CaseState.Energy) { 
-                            radar_nrj++;
-                            NRJPOINT n = new NRJPOINT();
-                            n.posx= j;
-                            n.posy= i;
-                            NRJ_list.Add(n);
+                    GridPoint p = new GridPoint(new Vector2(i,j));
+                    // IF point is energy :
+                    if (informations[index] == (byte)CaseState.Energy)
+                    {
+                        radar_nrj++;
+                        NRJ_list.Add(p);
+                        p.Walkable=true;
                     }
+                    // If point point is Ennemy 
                     if (informations[index] == (byte)CaseState.Ennemy)
                     {
                         meX = j;
                         meY = i;
+                        p.Walkable=false;
                     }
+                    if (informations[index] == (byte)CaseState.Wall)
+                    {
+                        p.Walkable=false;
+                    }
+                    if (informations[index] == (byte)CaseState.Empty)
+                    {
+                        p.Walkable=true;
+                    } 
                     index++;
+                    lineCells.Add(p);
                 }
+                ScanMap.Add(lineCells);
             }
-
+            
             // Find route for each nrgpoint : 
-            List<List<MoveDirection>> routes = new List<List<MoveDirection>>(); 
-            foreach (NRJPOINT p in NRJ_list){
-              route = find_route(p);
-              if (check_route(route)){
-                routes.Add(route);
-              }
-                  
+            /*
+            List<List<MoveDirection>> routes = new List<List<MoveDirection>>();
+            foreach (GridPoint p in NRJ_list)
+            {
+                //route = find_route(p);
+                route = find_route_astar(p,ScanMap);
+
+                if (check_route(route))
+                {
+                    routes.Add(route);
+                }
+
             }
-            //mytarget = find_nearest_energy(NRJ_list);
-            //route = find_best_route(mytarget);
+            */
+            mytarget = find_nearest_energy(NRJ_list);
+            route = find_route_astar(mytarget,ScanMap);
         }
- 
+
         //début modif
         public byte[] randommove()
         {
@@ -180,11 +284,11 @@ namespace SampleBot
             ret = new byte[2]; //tableau de taille 2 octet
             ret[0] = (byte)BotAction.Move;
             ret[1] = (byte)rnd.Next(1, 5);
- 
+
             return ret;
         }
         //fin modif
- 
+
         /// <summary>
         /// On dot effectuer une action
         /// </summary>
@@ -193,6 +297,7 @@ namespace SampleBot
         {
             byte[] ret;
             // nous venons d'être touché
+            /*
             if (hasBeenHit)
             {
                 // plus de bouclier ?
@@ -206,7 +311,7 @@ namespace SampleBot
                     ret[2] = (byte)(currentShieldLevel >> 8);
                     return ret;
                 }
- 
+
                 hasBeenHit = false;
                 // puis on se déplace fissa, au hazard
                 ret = new byte[2];
@@ -214,7 +319,7 @@ namespace SampleBot
                 ret[1] = (byte)rnd.Next(1, 5);
                 return ret;
             }
- 
+
             // si pas de bouclier, on en met un en route
             if (currentShieldLevel == 0)
             {
@@ -226,38 +331,27 @@ namespace SampleBot
                 ret[2] = (byte)(currentShieldLevel >> 8);
                 return ret;
             }
- 
+
+            */
             ret = new byte[2];
             ret[0] = (byte)BotAction.Move;
-            if (route.Count>0) {
+            // if we have route points : 
+            if (route.Count > 0)
+            {
+                //move to the next point :
                 ret[1] = (byte)route[0];
-                route.RemoveAt(0);        
-            } else {                
-            // on se déplace au hazard
-                ret[1] = (byte)rnd.Next(1,5);      
+                // remove it :
+                route.RemoveAt(0);
             }
- 
-            //var ret = new byte[1];
-            //ret[0] = (byte)BotAction.None;
- 
-            //ret = new byte[2];
-            //ret[0] = (byte)BotAction.Move;
-            //ret[1] = (byte)MoveDirection.North;
- 
-            //var ret = new byte[2];
-            //ret[0] = (byte)BotAction.ShieldLevel;
-            //ret[1] = 10;
- 
-            //var ret = new byte[2];
-            //ret[0] = (byte)BotAction.CloackLevel;
-            //ret[1] = 20;
- 
-            // ret = new byte[2];
-            // ret[0] = (byte)BotAction.ShieldLevel;
-            // ret[1] = (byte)MoveDirection.North;
- 
+            else
+            {
+                // on se déplace au hazard
+                ret[1] = (byte)rnd.Next(1, 5);
+            }
+
+         
             return ret;
         }
- 
+
     }
 }

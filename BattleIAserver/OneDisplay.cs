@@ -103,10 +103,6 @@ namespace BattleIAserver
             for (int j = 0; j < MainGame.Settings.MapHeight; j++)
                 for (int i = 0; i < MainGame.Settings.MapWidth; i++)
                     buffer[index++] = (byte)MainGame.TheMap[i, j];
-            /*foreach(OneClient oc in MainGame.AllBot)
-            {
-                buffer[5 + oc.bot.X +( oc.bot.Y * MainGame.MapWidth)] = (byte)CaseState.Ennemy;
-            }*/
             try
             {
                 Console.WriteLine("[DISPLAY] Sending MAPINFO ...");
@@ -119,13 +115,14 @@ namespace BattleIAserver
             }
         }
 
-        public async Task SendBotInfo(){
-            var buffer = new byte[2 + MainGame.AllBot.Count*13];
+        public async Task SendBotInfo()
+        {
+            var buffer = new byte[2 + MainGame.AllBot.Count * 13];
             buffer[0] = System.Text.Encoding.ASCII.GetBytes("B")[0];
             buffer[1] = (byte)MainGame.AllBot.Count;
-  
+
             int index = 0;
-            foreach(OneBot oc in MainGame.AllBot)
+            foreach (OneBot oc in MainGame.AllBot)
             {
                 buffer[2+index] = (byte)oc.bot.Energy;
                 buffer[3+index] = (byte)oc.bot.X;
@@ -136,8 +133,8 @@ namespace BattleIAserver
                 }
                 index+=13;
             }
-            
-       
+
+
             try
             {
                 Console.WriteLine("[DISPLAY] Sending BOTINFO");

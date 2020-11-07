@@ -1,8 +1,0 @@
-/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/bin/Debug/netcoreapp3.1/BattleIA.Common.deps.json
-/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/bin/Debug/netcoreapp3.1/BattleIA.Common.dll
-/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/bin/Debug/netcoreapp3.1/BattleIA.Common.pdb
-/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/obj/Debug/netcoreapp3.1/BattleIA.Common.csprojAssemblyReference.cache
-/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/obj/Debug/netcoreapp3.1/BattleIA.Common.AssemblyInfoInputs.cache
-/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/obj/Debug/netcoreapp3.1/BattleIA.Common.AssemblyInfo.cs
-/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/obj/Debug/netcoreapp3.1/BattleIA.Common.dll
-/home/asthro/Projects/15-Code/BattleIA/BattleIA.Common/obj/Debug/netcoreapp3.1/BattleIA.Common.pdb

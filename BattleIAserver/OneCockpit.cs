@@ -107,7 +107,8 @@ namespace BattleIAserver
             try
             {
                 await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-            } catch(Exception) { }
+            }
+            catch (Exception) { }
 
 
         } // WaitReceive()

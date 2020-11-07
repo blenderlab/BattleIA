@@ -1,1 +1,0 @@
-dotnet SampleBot.dll

@@ -399,7 +399,7 @@ namespace BattleIAserver
             // activation du BOT pour connaitre le niveau de détection
             turn++;
             var buffer = new byte[(byte)MessageSize.Turn];
-            buffer[0] = System.Text.Encoding.ASCII.GetBytes("T")[0];
+            buffer[0] = (byte)Message.m_yourTurn;
             buffer[1] = (byte)turn;
             buffer[2] = (byte)(turn >> 8);
             buffer[3] = (byte)bot.Energy;
@@ -427,7 +427,7 @@ namespace BattleIAserver
         {
             if (IsEnd) return;
             var buffer = new byte[(byte)MessageSize.Change];
-            buffer[0] = System.Text.Encoding.ASCII.GetBytes("C")[0];
+            buffer[0] = (byte)Message.m_newInfos;
             buffer[1] = (byte)bot.Energy;
             buffer[2] = (byte)(bot.Energy >> 8);
             buffer[3] = (byte)bot.ShieldLevel;
@@ -455,8 +455,8 @@ namespace BattleIAserver
         {
             if (IsEnd) return;
             State = BotState.IsDead;
-            var buffer = new byte[(byte)MessageSize.Dead];
-            buffer[0] = System.Text.Encoding.ASCII.GetBytes("D")[0];
+            var buffer = new byte[1];
+            buffer[0] = (byte)Message.m_dead;
             try
             {
                 Console.WriteLine($"Bot {bot.Name} is dead!");
@@ -478,7 +478,7 @@ namespace BattleIAserver
             if (IsEnd) return;
             int distance = 2 * size + 1;
             var buffer = new byte[2 + distance * distance];
-            buffer[0] = System.Text.Encoding.ASCII.GetBytes("I")[0];
+            buffer[0] = (byte)Message.m_mapInfos;
             buffer[1] = (byte)(distance);
             UInt16 posByte = 2;
             int posY = bot.Y + size;
@@ -561,8 +561,8 @@ namespace BattleIAserver
             {
                 points = (UInt16)(2 * MainGame.Settings.PointByEnnemyTouch);
                 // pas de bouclier, perte directe d'énergie !
-                if (bot.Energy >= (2*MainGame.Settings.EnergyLostContactEnemy))
-                    bot.Energy -= (ushort)(2*MainGame.Settings.EnergyLostContactEnemy);
+                if (bot.Energy >= (2 * MainGame.Settings.EnergyLostContactEnemy))
+                    bot.Energy -= (ushort)(2 * MainGame.Settings.EnergyLostContactEnemy);
                 else
                     bot.Energy = 0;
             }
@@ -585,7 +585,7 @@ namespace BattleIAserver
         {
             if (IsEnd) return;
             var buffer = new byte[(byte)MessageSize.Position];
-            buffer[0] = System.Text.Encoding.ASCII.GetBytes("P")[0];
+            buffer[0] = (byte)Message.m_Position;
             buffer[1] = (byte)bot.X;
             buffer[2] = (byte)bot.Y;
             MainGame.SendCockpitInfo(bot.GUID, new ArraySegment<byte>(buffer, 0, buffer.Length));
@@ -606,11 +606,11 @@ namespace BattleIAserver
                 case MoveDirection.South: y = -1; break;
                 case MoveDirection.East: x = -1; break;
                 case MoveDirection.West: x = 1; break;
-                /*case MoveDirection.NorthWest: y = 1; x = 1; break;
-                case MoveDirection.NorthEast: y = 1; x = -1; break;
-                case MoveDirection.SouthWest: y = -1; x = 1; break;
-                case MoveDirection.SouthEast: y = -1; x = -1; break;
-                */
+                    /*case MoveDirection.NorthWest: y = 1; x = 1; break;
+                    case MoveDirection.NorthEast: y = 1; x = -1; break;
+                    case MoveDirection.SouthWest: y = -1; x = 1; break;
+                    case MoveDirection.SouthEast: y = -1; x = -1; break;
+                    */
             }
             switch (MainGame.TheMap[bot.X + x, bot.Y + y])
             {
@@ -638,14 +638,14 @@ namespace BattleIAserver
                 case CaseState.Ennemy: // on tamponne un bot adverse
                     if (bot.ShieldLevel >= MainGame.Settings.EnergyLostContactEnemy)
                     {
-                        bot.ShieldLevel-= MainGame.Settings.EnergyLostContactEnemy;
+                        bot.ShieldLevel -= MainGame.Settings.EnergyLostContactEnemy;
                         MainGame.ViewerPlayerShield(bot.X, bot.Y, bot.ShieldLevel);
                     }
                     else
                     {
                         UInt16 tmp = bot.ShieldLevel;
                         bot.ShieldLevel = 0;
-                        tmp = (UInt16)(2*(MainGame.Settings.EnergyLostContactEnemy - tmp));
+                        tmp = (UInt16)(2 * (MainGame.Settings.EnergyLostContactEnemy - tmp));
                         if (bot.Energy >= tmp)
                             bot.Energy -= tmp;
                         else
@@ -692,9 +692,9 @@ namespace BattleIAserver
 
         private async void TouchEnemy(UInt16 x, UInt16 y)
         {
-            foreach(OneBot client in MainGame.AllBot)
+            foreach (OneBot client in MainGame.AllBot)
             {
-                if(client.bot.X == x && client.bot.Y == y)
+                if (client.bot.X == x && client.bot.Y == y)
                 {
                     var pts = await client.IsHit();
                     bot.Score += pts;
@@ -710,10 +710,11 @@ namespace BattleIAserver
             try
             {
                 dir = (MoveDirection)direction;
-            } catch(Exception) { return; }
+            }
+            catch (Exception) { return; }
             int dx = 0;
             int dy = 0;
-            switch(dir)
+            switch (dir)
             {
                 case MoveDirection.North:
                     dy = 1;
@@ -730,9 +731,9 @@ namespace BattleIAserver
             }
             int tx = bot.X + dx;
             int ty = bot.Y + dy;
-            while(tx > 0 && tx < MainGame.Settings.MapWidth && ty > 0 && ty < MainGame.Settings.MapHeight)
+            while (tx > 0 && tx < MainGame.Settings.MapWidth && ty > 0 && ty < MainGame.Settings.MapHeight)
             {
-                if(MainGame.TheMap[tx,ty] == CaseState.Ennemy)
+                if (MainGame.TheMap[tx, ty] == CaseState.Ennemy)
                 {
                     Console.WriteLine($"Bot {bot.Name} shoot from {bot.X}/{bot.Y}");
                     TouchEnemy((ushort)tx, (ushort)ty);
