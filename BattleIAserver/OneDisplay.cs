@@ -132,8 +132,9 @@ namespace BattleIAserver
                 buffer[4+index] = (byte)oc.bot.Y;
                 buffer[5+index] = (byte)oc.bot.Score;
                 for (int i=0;i<9;i++){    
-                    buffer[6+index++] = (byte)oc.bot.Name[i];
+                    buffer[6+i+index] = (byte)oc.bot.Name[i];
                 }
+                index+=13;
             }
             
        

@@ -1,0 +1,15 @@
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/bin/Debug/netcoreapp3.1/launch.bat
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/bin/Debug/netcoreapp3.1/SampleBot
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/bin/Debug/netcoreapp3.1/SampleBot.deps.json
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/bin/Debug/netcoreapp3.1/SampleBot.runtimeconfig.json
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/bin/Debug/netcoreapp3.1/SampleBot.runtimeconfig.dev.json
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/bin/Debug/netcoreapp3.1/SampleBot.dll
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/bin/Debug/netcoreapp3.1/SampleBot.pdb
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/bin/Debug/netcoreapp3.1/BattleIA.Common.dll
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/bin/Debug/netcoreapp3.1/BattleIA.Common.pdb
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/obj/Debug/netcoreapp3.1/SampleBot.csprojAssemblyReference.cache
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/obj/Debug/netcoreapp3.1/SampleBot.AssemblyInfoInputs.cache
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/obj/Debug/netcoreapp3.1/SampleBot.AssemblyInfo.cs
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/obj/Debug/netcoreapp3.1/SampleBot.csproj.CopyComplete
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/obj/Debug/netcoreapp3.1/SampleBot.dll
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/obj/Debug/netcoreapp3.1/SampleBot.pdb

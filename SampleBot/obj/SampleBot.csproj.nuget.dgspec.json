@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/asthro/Documents/BattleIA/SampleBot/SampleBot.csproj": {}
+    "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/SampleBot.csproj": {}
   },
   "projects": {
-    "/home/asthro/Documents/BattleIA/BattleIA.Common/BattleIA.Common.csproj": {
+    "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/BattleIA.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/asthro/Documents/BattleIA/BattleIA.Common/BattleIA.Common.csproj",
+        "projectUniqueName": "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/BattleIA.Common.csproj",
         "projectName": "BattleIA.Common",
-        "projectPath": "/home/asthro/Documents/BattleIA/BattleIA.Common/BattleIA.Common.csproj",
+        "projectPath": "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/BattleIA.Common.csproj",
         "packagesPath": "/home/asthro/.nuget/packages/",
-        "outputPath": "/home/asthro/Documents/BattleIA/BattleIA.Common/obj/",
+        "outputPath": "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/asthro/.nuget/NuGet/NuGet.Config"
@@ -57,14 +57,14 @@
         }
       }
     },
-    "/home/asthro/Documents/BattleIA/SampleBot/SampleBot.csproj": {
+    "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/SampleBot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/asthro/Documents/BattleIA/SampleBot/SampleBot.csproj",
+        "projectUniqueName": "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/SampleBot.csproj",
         "projectName": "SampleBot",
-        "projectPath": "/home/asthro/Documents/BattleIA/SampleBot/SampleBot.csproj",
+        "projectPath": "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/SampleBot.csproj",
         "packagesPath": "/home/asthro/.nuget/packages/",
-        "outputPath": "/home/asthro/Documents/BattleIA/SampleBot/obj/",
+        "outputPath": "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/SampleBot/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/asthro/.nuget/NuGet/NuGet.Config"
@@ -78,8 +78,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "/home/asthro/Documents/BattleIA/BattleIA.Common/BattleIA.Common.csproj": {
-                "projectPath": "/home/asthro/Documents/BattleIA/BattleIA.Common/BattleIA.Common.csproj"
+              "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/BattleIA.Common.csproj": {
+                "projectPath": "/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/BattleIA.Common.csproj"
               }
             }
           }

@@ -16,3 +16,11 @@ C:/Users/stephane.fardoux/source/repos/BattleIA/BattleIA.Common/obj/Debug/netcor
 /home/asthro/Documents/BattleIA/BattleIA.Common/bin/Debug/netcoreapp2.2/BattleIA.Common.deps.json
 /home/asthro/Documents/BattleIA/BattleIA.Common/bin/Debug/netcoreapp2.2/BattleIA.Common.dll
 /home/asthro/Documents/BattleIA/BattleIA.Common/bin/Debug/netcoreapp2.2/BattleIA.Common.pdb
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/bin/Debug/netcoreapp2.2/BattleIA.Common.deps.json
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/bin/Debug/netcoreapp2.2/BattleIA.Common.dll
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/bin/Debug/netcoreapp2.2/BattleIA.Common.pdb
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/obj/Debug/netcoreapp2.2/BattleIA.Common.csprojAssemblyReference.cache
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/obj/Debug/netcoreapp2.2/BattleIA.Common.AssemblyInfoInputs.cache
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/obj/Debug/netcoreapp2.2/BattleIA.Common.AssemblyInfo.cs
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/obj/Debug/netcoreapp2.2/BattleIA.Common.dll
+/home/asthro/Documents/10-Blenderlab/30-Clients/yncrea/BattleIA/BattleIA.Common/obj/Debug/netcoreapp2.2/BattleIA.Common.pdb
