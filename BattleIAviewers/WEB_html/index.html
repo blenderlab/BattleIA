@@ -6,17 +6,87 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+	html{
+		background-image: url("res/background.jpg");
+		padding:20px;
+	}
 	#bot_list {
 		width:150px;
 		float:left;
 		height:auto;
 	}
+	.column{
+	background-image: url("res/background.jpg");
+	margin:20px;		
+	padding:0;	
+	box-shadow: 5px 5px 10px 0px #222;
+
+	}
+	.column h1{
+		background: #000;
+		text-align: center;
+		font-size: 2em;
+		color:#DDD;
+		font-weight:bold;
+		text-transform: uppercase;
+		
+	}
+	.column .content{
+		padding:5px;
+	}
+	.column ul{
+		padding:0;
+	}
+	#bots,#bot_list{
+    width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+}	
+	#bots li{
+		width: 100%;                 /* Set width of cards */
+ 		border: 1px solid #333;    /* Set up Border */
+	  	overflow: hidden;             /* Fixes the corners */
+		background: #FFFFFF30;
+		color:#000;
+		padding:3px;
+	}
+	#bots .name{
+		color:#696;
+		font-weight: bold;
+		text-transform: uppercase;
+
+	}
+	#bots .nrj{
+		float : left;
+		clear:right;
+		width:100%;
+	}
+	#bots .nrj span{
+		float:left;
+		width:30%;
+		color:#333;
+		text-transform: uppercase;
+
+	}
+	.progress{
+		float:left;
+		margin-top:4px;
+		width: 70%;
+	}
+	.content canvas {
+		text-align: center;
+		margin-left:auto;
+		margin-right:auto;
+
+	}
+	
 </style>
 
 <script type="text/javascript">
 var ctx = null;
 var gameMap = [];
-var tileW = 10, tileH = 10;
+var tileW = 12, tileH = 12;
 var mapW = 10, mapH = 10;
 var currentSecond = 0, frameCount = 0, framesLastSecond = 0;
 let socket = new WebSocket("ws://localhost:4626/display");
@@ -64,7 +134,8 @@ if (message[0]=="M"){
   		var bot_div ;
 		var bot_container ;
  		bot_div = document.createElement( 'li' );
-		bot_div.innerHTML = name + "<div class='nrj'>"+nrj+"</div>";
+		bot_div.innerHTML = "<div class='name'>"+name+"</div>"; 
+		bot_div.innerHTML += "<div class='nrj'><span>Energy </span><progress class='progress is-primary' value='"+nrj+"' max='100'>Energy</progress></div>";
 		bot_container.appendChild( bot_div ); 
   		//alert(`${i} X,Y = ${message[p+3]},${message[p+4]}`);
   		//alert(`${i} Score = ${message[p+5]}`);
@@ -106,14 +177,14 @@ function drawGame()
 			switch(gameMap[((y*mapW)+x)])
 			{
 				case 0: // Empty
-					ctx.fillStyle = "#FFFCF0";
+					ctx.fillStyle = "#5F5C50";
 					break;
 				case 1: // NRJ
 					ctx.fillStyle = "#F7DB5E";
 					break;
 				case 2:
 					// Wall 
-					ctx.fillStyle = "#083979";
+					ctx.fillStyle = "#050505";
 					break;
 				case 3:
 					// ?? 
@@ -141,22 +212,29 @@ function drawGame()
 </head>
 <body>
 <div class="container">
-<div class="columns">
-  <div class="column">
-	Server Status
-  </div>
-  <div class="column">
-    <h1>Bots List</h1>
-		<div id="bot_list">
-			<ul id="bots">
-			</ul>
+	<div class="columns ">
+	  <div class="column">
+		<h1>Server Status</h1>
+		<div class="content">
 		</div>
-  </div>
-  <div class="column">
-    Game Panel
-	<canvas id="game" width="400" height="400"></canvas>
-  </div>
- </div>
+	  </div>
+	  <div class="column">
+	    <h1>Bots List</h1>
+		<div class="content">
+			<div id="bot_list">
+				<ul id="bots">
+				</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="column is-one-third">
+	    <h1>Game Panel</h1>
+		<div class="content">
+			<canvas id="game" width="400" height="400"></canvas>
+	  	</div>
+	  </div>
+	 
+	</div>
 </div>
 </body>
 </html>
