@@ -2,19 +2,23 @@ const WebSocket = require('ws');
 var express = require('express');
 var router = express.Router();
 
+var map = null;
+
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 	let clients = [new WebSocket('ws://localhost:4626/display')];
 	clients.map(client => {
-	  client.on('message', msg=> manage_msg(msg));
+	  client.on('message', msg=> manage_msg(msg,res));
 	});
 	// Wait for the client to connect using async/await
 	new Promise(resolve => clients[0].once('open', resolve));
 
-	res.send("ok");
  });
 
-function manage_msg(msg) {
+
+
+function manage_msg(msg,res) {
   console.log(`========`);
   var msgByte = Buffer.from(msg)
   if (msg.charAt(0)=='M'){
@@ -27,9 +31,9 @@ function manage_msg(msg) {
 	  	l=""
 	  	for (j=0;j<w;j++){
   			l=l+msgByte[5+i*w+j];
+        map.add(l);
   		}
   		console.log(`${l}`);
-  		
   	}
 
   }
@@ -50,6 +54,8 @@ function manage_msg(msg) {
   		
   	}
   }
+  res.render('index');
+
 };
 
 module.exports = router;

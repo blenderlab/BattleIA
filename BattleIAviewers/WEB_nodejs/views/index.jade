@@ -1,5 +1,8 @@
 extends layout
 
 block content
+  script(src="../javascripts/game.js") 
   h1= title
   p Welcome to #{title}
+  canvas#game(width=400 height=400) 
+

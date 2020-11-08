@@ -1,5 +1,5 @@
 {
-  "name": "battleia-webviever",
+  "name": "web-nodejs",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
-    "ws": "^7.3.1"
+    "socket.io": "^3.0.0",
+    "socketio": "^1.0.0"
   }
 }

@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<script type="text/javascript">
 var ctx = null;
 var gameMap = [
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -62,12 +57,3 @@ function drawGame()
 
 	requestAnimationFrame(drawGame);
 }
-</script>
-
-</head>
-<body>
-
-<canvas id="game" width="400" height="400"></canvas>
-
-</body>
-</html>
