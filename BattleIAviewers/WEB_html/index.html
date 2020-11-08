@@ -1,30 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge' />
+	<title>BattleIA Game Viewer</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+	#bot_list {
+		width:150px;
+		float:left;
+		height:auto;
+	}
+</style>
 
 <script type="text/javascript">
 var ctx = null;
-var gameMap = [
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 1, 1, 1, 0, 1, 1, 1, 1, 0,
-	0, 1, 0, 0, 0, 1, 0, 0, 0, 0,
-	0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-	0, 1, 0, 1, 0, 0, 0, 1, 1, 0,
-	0, 1, 0, 1, 0, 1, 0, 0, 1, 0,
-	0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-	0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
-	0, 1, 1, 1, 0, 1, 1, 1, 1, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-];
-var tileW = 40, tileH = 40;
+var gameMap = [];
+var tileW = 10, tileH = 10;
 var mapW = 10, mapH = 10;
 var currentSecond = 0, frameCount = 0, framesLastSecond = 0;
+let socket = new WebSocket("ws://localhost:4626/display");
 
 window.onload = function()
 {
 	ctx = document.getElementById('game').getContext("2d");
 	requestAnimationFrame(drawGame);
 	ctx.font = "bold 10pt sans-serif";
+};
+
+
+socket.onopen = function(e) {
+  //socket.send("My name is John");
+};
+
+socket.onmessage = function(event) {
+ var  message = (event.data);
+
+if (message[0]=="M"){
+ 	nbBots=message.charCodeAt(1);
+	mapW = message.charCodeAt(1)+256*message.charCodeAt(2);
+  	mapH = message.charCodeAt(3)+256*message.charCodeAt(4);
+  	console.log(`Map Size ${mapW} x ${mapH}`);
+  	
+  	for (i=0;i<mapH;i++){
+	  	for (j=0;j<mapW;j++){
+        	gameMap.push(message.charCodeAt(5+i*mapW+j));
+  		}
+  	}}
+
+ if (message[0]=="B"){
+ 	nbBots=message.charCodeAt(1);
+  	console.log(nbBots+' bot(s) found: ');
+
+	bot_container = document.getElementById( 'bots' );
+	bot_container.innerHTML='';
+  	for (i=0;i<nbBots;i++){
+  		p=i*13
+  		name=""
+  		for (j=0;j<9;j++){
+  			name=name+String.fromCharCode(message.charCodeAt(p+6+j));
+  		}
+  		nrj =message.charCodeAt(p+2); 
+  		var bot_div ;
+		var bot_container ;
+ 		bot_div = document.createElement( 'li' );
+		bot_div.innerHTML = name + "<div class='nrj'>"+nrj+"</div>";
+		bot_container.appendChild( bot_div ); 
+  		//alert(`${i} X,Y = ${message[p+3]},${message[p+4]}`);
+  		//alert(`${i} Score = ${message[p+5]}`);
+  	}
+ }
+};
+
+socket.onclose = function(event) {
+  if (event.wasClean) {
+    alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+  } else {
+    // e.g. server process killed or network down
+    // event.code is usually 1006 in this case
+    alert('[close] Connection died');
+  }
+};
+
+socket.onerror = function(error) {
+  alert(`[error] ${error.message}`);
 };
 
 function drawGame()
@@ -46,8 +105,23 @@ function drawGame()
 		{
 			switch(gameMap[((y*mapW)+x)])
 			{
-				case 0:
-					ctx.fillStyle = "#685b48";
+				case 0: // Empty
+					ctx.fillStyle = "#FFFCF0";
+					break;
+				case 1: // NRJ
+					ctx.fillStyle = "#F7DB5E";
+					break;
+				case 2:
+					// Wall 
+					ctx.fillStyle = "#083979";
+					break;
+				case 3:
+					// ?? 
+					ctx.fillStyle = "#F7DB5E";
+					break;
+				case 4:
+					// Bot 
+					ctx.fillStyle = "#FF003C";
 					break;
 				default:
 					ctx.fillStyle = "#5aa457";
@@ -66,8 +140,23 @@ function drawGame()
 
 </head>
 <body>
-
-<canvas id="game" width="400" height="400"></canvas>
-
+<div class="container">
+<div class="columns">
+  <div class="column">
+	Server Status
+  </div>
+  <div class="column">
+    <h1>Bots List</h1>
+		<div id="bot_list">
+			<ul id="bots">
+			</ul>
+		</div>
+  </div>
+  <div class="column">
+    Game Panel
+	<canvas id="game" width="400" height="400"></canvas>
+  </div>
+ </div>
+</div>
 </body>
 </html>
