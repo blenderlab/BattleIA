@@ -296,8 +296,10 @@ namespace BattleIAserver
                                 bot.Name = System.Text.Encoding.UTF8.GetString(buffer, 1, result.Count - 1);
                                 Console.WriteLine($"Le BOT {bot.GUID} se nomme {bot.Name}");
                                 State = BotState.Ready;
+                                //MainGame.SendCockpitInfo(bot.GUID, "N" + bot.Name);
+                                MainGame.RefreshViewer();
                                 await SendMessage("OK");
-                                MainGame.SendCockpitInfo(bot.GUID, "N" + bot.Name);
+                                
                                 break;
                             }
                             Console.WriteLine($"[ERROR] lost with state {State}");
@@ -471,6 +473,7 @@ namespace BattleIAserver
             if (MainGame.TheMap[bot.X, bot.Y] == CaseState.Ennemy)
                 MainGame.TheMap[bot.X, bot.Y] = CaseState.Energy;
             MainGame.SendCockpitInfo(bot.GUID, new ArraySegment<byte>(buffer, 0, buffer.Length));
+
         }
 
         public async Task DoScan(byte size)

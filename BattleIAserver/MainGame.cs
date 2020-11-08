@@ -374,15 +374,12 @@ namespace BattleIAserver
                 AllBot.Add(client);
             };
             // fin du ménage
+            RefreshViewer();
             //Console.WriteLine("Do it!");
             foreach (OneBot o in toRemove)
                 RemoveBot(o.ClientGuid);
             Console.WriteLine($"#bots: {AllBot.Count}");
-            RefreshViewer();
-            /*Console.WriteLine("Starting thread");
-            Thread t = new Thread(DoTurns);
-            t.Start();*/
-
+          
             // on se met à l'écoute des messages de ce client
             await client.WaitReceive();
             // arrivé ici, c'est que le client s'est déconnecté
@@ -457,7 +454,7 @@ namespace BattleIAserver
             if (toRemove != null)
             {
                 ViewerRemovePlayer(toRemove.bot.X, toRemove.bot.Y);
-                //RefreshViewer();
+                RefreshViewer();
             }
             Console.WriteLine($"#bots: {AllBot.Count}");
         }
@@ -488,6 +485,7 @@ namespace BattleIAserver
                 foreach (OneDisplay o in AllViewer)
                 {
                     o.SendMapInfo();
+
                     o.SendBotInfo();
                 }
             }

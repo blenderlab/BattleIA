@@ -68,8 +68,8 @@ namespace BattleIAserver
                     await webSocket.CloseAsync(WebSocketCloseStatus.ProtocolError, "Missing data in answer 'D'", CancellationToken.None);
                     return;
                 }*/
-                await SendMapInfo();
-                await SendBotInfo();
+                //SendMapInfo();
+                //SendBotInfo();
 
                 try
                 {
@@ -117,9 +117,10 @@ namespace BattleIAserver
 
         public async Task SendBotInfo()
         {
-            var buffer = new byte[2 + MainGame.AllBot.Count * 13];
+            var buffer = new byte[2 + MainGame.AllBot.Count * 14];
             buffer[0] = System.Text.Encoding.ASCII.GetBytes("B")[0];
             buffer[1] = (byte)MainGame.AllBot.Count;
+
 
             int index = 0;
             foreach (OneBot oc in MainGame.AllBot)
@@ -129,7 +130,11 @@ namespace BattleIAserver
                 buffer[4+index] = (byte)oc.bot.Y;
                 buffer[5+index] = (byte)oc.bot.Score;
                 for (int i=0;i<9;i++){    
-                    buffer[6+i+index] = (byte)oc.bot.Name[i];
+                    if (i<oc.bot.Name.Length){
+                        buffer[6+i+index] = (byte)oc.bot.Name[i];
+                    } else {
+                        buffer[6+i+index] = (byte)' ';
+                    }
                 }
                 index+=13;
             }
@@ -137,7 +142,7 @@ namespace BattleIAserver
 
             try
             {
-                Console.WriteLine("[DISPLAY] Sending BOTINFO");
+                Console.WriteLine("[DISPLAY] Sending BOTINFO...");
                 await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
             }
             catch (Exception err)

@@ -73,15 +73,14 @@ namespace BattleIAserver
                 {
                     if (context.Request.Path == "/display")
                     {
-                        Console.WriteLine("WebSocket /display");
+                        Console.WriteLine("[SOCKET] WebSocket /display");
                         if (context.WebSockets.IsWebSocketRequest)
                         {
                             // on l'ajoute à notre simulation !
                             WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                            Console.WriteLine("New DISPLAY!");
+                            Console.WriteLine("[DISPLAY] New DISPLAY!");
                             await MainGame.AddViewer(webSocket);
-
-                            Console.WriteLine($"#DISPLAY: {MainGame.AllViewer.Count}");
+                            Console.WriteLine($"[DISPLAY] number= {MainGame.AllViewer.Count}");
                         }
                         else
                         {
