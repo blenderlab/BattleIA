@@ -72,4 +72,24 @@
 		margin-right:auto;
 
 	}
-	
+	 dl {
+    display: flex;
+    flex-flow: row wrap;
+    border: solid #333;
+    border-width: 0px 0px 0 0;
+  }
+  dt {
+    flex-basis: 20%;
+    padding: 2px 4px;
+    background: #333;
+    text-align: right;
+    color: #fff;
+  }
+  dd {
+    flex-basis: 70%;
+    flex-grow: 1;
+    margin: 0;
+    padding: 2px 4px;
+    border-bottom: 0px solid #333;
+    color:#FFF;
+  }

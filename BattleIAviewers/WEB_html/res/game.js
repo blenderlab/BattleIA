@@ -3,17 +3,41 @@ var gameMap = [];
 var tileW = 12, tileH = 12;
 var mapW = 10, mapH = 10;
 var currentSecond = 0, frameCount = 0, framesLastSecond = 0;
-let socket = new WebSocket("ws://localhost:4626/display");
-
+var server_ip = "localhost";
+var server_port = "4626";
+var server_state = "DOWN";
+let socket = new WebSocket("ws://"+server_ip+":"+server_port+"/display");
+var img_wall = new Image();
+var img_bot = new Image();
+var img_nrg = new Image();
+var img_empty = new Image();
+img_wall.src = 'res/tile_wall.png';
+img_empty.src = 'res/tile_empty.png';
+img_nrg.src = 'res/tile_power.png';
+img_bot.src = 'res/tile_robot.png';
+var p_wall;
+var p_empty;
+var p_nrg;
+var p_bot;
+	
 window.onload = function()
 {
 	ctx = document.getElementById('game').getContext("2d");
 	requestAnimationFrame(drawGame);
 	ctx.font = "bold 10pt sans-serif";
+	updateServerState();
+	ctx.scale(0.1,0.1);
+	p_wall = ctx.createPattern(img_wall, 'repeat');
+	p_empty = ctx.createPattern(img_empty, 'repeat');
+	p_nrg = ctx.createPattern(img_nrg, 'repeat');
+	p_bot = ctx.createPattern(img_bot, 'repeat');
+ctx.setTransform(1, 0, 0, 1, 0, 0);
 };
+	
 
 socket.onopen = function(e) {
-  //socket.send("My name is John");
+	server_state="UP";
+  updateServerState();
 };
 
 socket.onmessage = function(event) {
@@ -44,17 +68,27 @@ socket.onmessage = function(event) {
 
 socket.onclose = function(event) {
   if (event.wasClean) {
-    alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+    //alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
   } else {
     // e.g. server process killed or network down
     // event.code is usually 1006 in this case
-    alert('[close] Connection died');
+    //alert('[close] Connection died');
   }
+  server_state="DOWN";
+  updateServerState();
 };
 
 socket.onerror = function(error) {
-  alert(`[error] ${error.message}`);
+  //alert(`[error] ${error.message}`);
+  server_state="DOWN";
+  updateServerState();
 };
+
+function updateServerState(){
+	document.getElementById( 'serverip' ).innerHTML=server_ip;
+	document.getElementById( 'serverport' ).innerHTML=server_port;
+	document.getElementById( 'serverstate' ).innerHTML=server_state;
+}
 
 function updatemap(message){
 	nbBots=message.charCodeAt(1);
@@ -76,6 +110,7 @@ function moveplayer(x1,y1,x2,y2){
 function removeplayer(x1,y1){
 	gameMap[y1*mapW+x1]=0;
 }
+
 
 function clearcase(x1,y1){
 	gameMap[y1*mapW+x1]=0;
@@ -123,22 +158,23 @@ function drawGame()
 			switch(gameMap[((y*mapW)+x)])
 			{
 				case 0: // Empty
-					ctx.fillStyle = "#5F5C50";
+					ctx.fillStyle = p_empty;
 					break;
-				case 1: // NRJ
-					ctx.fillStyle = "#F7DB5E";
+				case 1: // ???
+
+					ctx.fillStyle = "#121211";
 					break;
 				case 2:
 					// Wall 
-					ctx.fillStyle = "#050505";
+					ctx.fillStyle = p_wall;
 					break;
 				case 3:
 					// ?? 
-					ctx.fillStyle = "#F7DB5E";
+					ctx.fillStyle = p_nrg;
 					break;
 				case 4:
 					// Bot 
-					ctx.fillStyle = "#FF003C";
+					ctx.fillStyle = p_bot;
 					break;
 				default:
 					ctx.fillStyle = "#5aa457";
@@ -148,8 +184,8 @@ function drawGame()
 		}
 	}
 
-	ctx.fillStyle = "#ff0000";
-	ctx.fillText("FPS: " + framesLastSecond, 10, 20);
+	ctx.fillStyle = "#CC0000";
+	ctx.fillText("FPS: " + framesLastSecond, 0, 10);
 
 	requestAnimationFrame(drawGame);
 }
