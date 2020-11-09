@@ -460,10 +460,6 @@ namespace BattleIAserver
             buffer[1] = (byte)Message.m_respawn;
             buffer[2] = (byte)Message.m_noRespawn;
             buffer[3] = (byte)Message.m_responseNoRespawn;
-            Console.Write($"Buffer : {buffer[0]}");
-            Console.Write($"Buffer : {buffer[1]}");
-            Console.Write($"Buffer : {buffer[2]}");
-            Console.Write($"Buffer : {buffer[3]}");
             try
             {
                 Console.WriteLine($"Bot {bot.Name} is dead!");
