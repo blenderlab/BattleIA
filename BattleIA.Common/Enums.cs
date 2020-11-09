@@ -29,10 +29,11 @@
     public enum CaseState : byte
     {
         Empty = 0,
-        // OurBot = 1,
+        OurBot = 1,
         Wall = 2,
         Energy = 3,
         Ennemy = 4,
+        Respawn = 5,
     }
 
     public enum BotAction : byte

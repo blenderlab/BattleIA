@@ -13,13 +13,7 @@ namespace SampleBot
         public static int GridPoint_SIZE = 10;
         public GridPoint Parent;
         public Vector2 Position;
-        public Vector2 Center
-        {
-            get
-            {
-                return new Vector2(Position.X + GridPoint_SIZE / 2, Position.Y + GridPoint_SIZE / 2);
-            }
-        }
+      
         public float DistanceToTarget;
         public float Cost;
         public float Weight;
@@ -134,10 +128,14 @@ namespace SampleBot
             Astar as_Path = new Astar(map);
             Stack<GridPoint> solution = new Stack<GridPoint>();
             solution = as_Path.FindPath(new Vector2(meX,meY), new Vector2(target.Position.X,target.Position.Y ));
-            foreach (GridPoint p in solution){
-                Console.WriteLine(p);
-            }
-            route = build_route(solution);
+            Stack<GridPoint> rsolution = new Stack<GridPoint>();
+
+            while (solution.Count != 0)
+                rsolution.Push(solution.Pop());
+ 
+            
+
+            route = build_route(rsolution);
             return route;
         }
 
@@ -164,6 +162,7 @@ namespace SampleBot
                     continue;
                 }
             }
+           
             return l;
         }
 
@@ -216,7 +215,7 @@ namespace SampleBot
         /// <param name="informations">Informations.</param>
         public void AreaInformation(byte distance, byte[] informations)
         {
-            if (distance == 0) { return; }
+            if (distance <=1) { return; }
 
             int radar_nrj = 0;
             List<GridPoint> NRJ_list = new List<GridPoint>();
