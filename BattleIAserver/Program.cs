@@ -20,7 +20,13 @@ namespace BattleIAserver
             }
             var prm = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(File.ReadAllText(theFile));
             MainGame.Settings = prm;
-            MainGame.InitNewMap();
+            if (MainGame.Settings.MapName != ""){
+                MainGame.LoadMap(MainGame.Settings.MapName);
+            } else {
+                MainGame.InitNewMap();
+            }
+        
+            
 
             var host = new WebHostBuilder()
             .UseKestrel()

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace BattleIAserver
 {
@@ -49,6 +50,43 @@ namespace BattleIAserver
         /// Sommes-nous dans un tour (?)
         /// </summary>
         private static bool turnRunning = false;
+
+        public static void LoadMap(String mapname)
+        {
+            // Read the file as one string.
+            string[] lines = System.IO.File.ReadAllLines(@mapname);
+        
+            int mWidth = lines[0].Length; 
+            int mHeight = 0;
+            foreach (string line in lines ){
+                mHeight++;
+            }
+                        // Now we know height & Width :
+            TheMap = new CaseState[mWidth, mHeight];
+            Settings.MapWidth= (UInt16)mWidth;
+            Settings.MapHeight= (UInt16)mHeight;
+
+            //pour chaque ligne du fichier : 
+            int nline = 0;
+        
+            foreach (string line in lines) {
+                Console.WriteLine(line);
+                int nchar = 0;
+                // pour chaque char de la ligne 
+                byte[] b=Encoding.UTF8.GetBytes(line);
+                // For each character of the line :
+                foreach (char c in line)  {
+                    // force each character to be read as an integer 
+                    // The cast it into a CaseState 
+                    TheMap[nchar,nline]= (CaseState)int.Parse(c.ToString());
+                    nchar++; 
+                }
+                nline++;
+            }
+            Console.WriteLine($"[MAP] Name : {mapname}");
+            Console.WriteLine($"[MAP] Size : {mWidth}x{mHeight}");
+        }
+
 
         /// <summary>
         /// Création d'un nouveau terrai de simulation, complet

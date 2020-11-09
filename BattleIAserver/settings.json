@@ -1,4 +1,5 @@
-﻿{
+
+{
   "ServerPort": 4626,
   "DelayBetweenEachBotTurn": 500,
   "MapWidth": 32,
@@ -17,5 +18,6 @@
   "PointByEnergyFound": 8,
   "PointByEnnemyTouch": 20,
   "PointByEnnemyKill": 70,
-  "EndlessMode":  true
+  "EndlessMode":  true,
+  "MapName": "map_1.txt"
 }
