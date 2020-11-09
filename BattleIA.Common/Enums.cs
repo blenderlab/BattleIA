@@ -22,9 +22,10 @@
          m_yourTurn=(byte)'T',
          m_newInfos=(byte)'C',
          m_Map = (byte)'M',
-         m_Position = (byte)'P'
-         
-      
+         m_Position = (byte)'P',
+         m_respawn = (byte)'R',
+         m_noRespawn = (byte)'B',
+         m_responseNoRespawn = (byte)'W'
     }
     public enum CaseState : byte
     {

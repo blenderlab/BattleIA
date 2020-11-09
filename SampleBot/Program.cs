@@ -140,16 +140,20 @@ namespace SampleBot
                             case Message.m_dead:
                                 //isDead = true;
                                 Console.WriteLine($"We are dead!");
-                                await client.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);// une fois le bot mort on ferme la connexion au server 
                                 if (settings.autoRespawn)
                                 {
                                     //serverUrl = "ws://127.0.0.1:4626/bot";// on se reconnecte au server 
-                                    settings.BotName = "RandomBOT";
-                                    MyIA ia = new MyIA();
-                                    Bot bot = new Bot();
-                                    turn = 0; // on remet les tours du bot à 0
-                                    DoWork().GetAwaiter().GetResult();
+                                    buffer[0] = (byte)Message.m_respawn;
+                                     await client.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
                                 }
+                                else
+                                {
+                                    buffer[0] = (byte)Message.m_noRespawn;
+                                    await client.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
+                                }
+                                break;
+                            case Message.m_responseNoRespawn:
+                                await client.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
                                 break;
                         
                         }

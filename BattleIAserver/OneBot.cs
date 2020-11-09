@@ -454,14 +454,22 @@ namespace BattleIAserver
         public async Task SendDead()
         {
             if (IsEnd) return;
-            State = BotState.IsDead;
-            var buffer = new byte[1];
+
+            var buffer = new byte[4];
             buffer[0] = (byte)Message.m_dead;
+            buffer[1] = (byte)Message.m_respawn;
+            buffer[2] = (byte)Message.m_noRespawn;
+            buffer[3] = (byte)Message.m_responseNoRespawn;
+            Console.Write($"Buffer : {buffer[0]}");
+            Console.Write($"Buffer : {buffer[1]}");
+            Console.Write($"Buffer : {buffer[2]}");
+            Console.Write($"Buffer : {buffer[3]}");
             try
             {
                 Console.WriteLine($"Bot {bot.Name} is dead!");
                 await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
-                MainGame.ViewerRemovePlayer(bot.X, bot.Y);
+                await respawnBot();
+                //MainGame.ViewerRemovePlayer(bot.X, bot.Y);
             }
             catch (Exception err)
             {
@@ -472,7 +480,33 @@ namespace BattleIAserver
                 MainGame.TheMap[bot.X, bot.Y] = CaseState.Energy;
             MainGame.SendCockpitInfo(bot.GUID, new ArraySegment<byte>(buffer, 0, buffer.Length));
         }
+        public async Task respawnBot()
+        {
+            var buffer = new byte[1024*6];
+            var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            byte command = buffer[0];
+            Console.WriteLine($"Command : {command}");
+            switch ((Message)command)
+            {
+                case Message.m_respawn:
+                    bot.Energy = MainGame.Settings.EnergyStart;
+                    State = BotState.Ready;
+                    MainGame.SearchEmptyCase();
+                    break;
+                case Message.m_noRespawn:
+                    State = BotState.IsDead;
+                    buffer[0] = (byte)Message.m_responseNoRespawn;
+                    MainGame.ViewerRemovePlayer(bot.X, bot.Y);
+                    if (MainGame.TheMap[bot.X, bot.Y] == CaseState.Ennemy)
+                    {
+                        MainGame.TheMap[bot.X, bot.Y] = CaseState.Energy;
+                    }
+                    MainGame.SendCockpitInfo(bot.GUID, new ArraySegment<byte>(buffer, 0, buffer.Length));
+                    webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
+                    break;
+            }
 
+        }
         public async Task DoScan(byte size)
         {
             if (IsEnd) return;
@@ -561,8 +595,8 @@ namespace BattleIAserver
             {
                 points = (UInt16)(2 * MainGame.Settings.PointByEnnemyTouch);
                 // pas de bouclier, perte directe d'énergie !
-                if (bot.Energy >= (2*MainGame.Settings.EnergyLostContactEnemy))
-                    bot.Energy -= (ushort)(2*MainGame.Settings.EnergyLostContactEnemy);
+                if (bot.Energy >= (2 * MainGame.Settings.EnergyLostContactEnemy))
+                    bot.Energy -= (ushort)(2 * MainGame.Settings.EnergyLostContactEnemy);
                 else
                     bot.Energy = 0;
             }
@@ -606,11 +640,11 @@ namespace BattleIAserver
                 case MoveDirection.South: y = -1; break;
                 case MoveDirection.East: x = -1; break;
                 case MoveDirection.West: x = 1; break;
-                /*case MoveDirection.NorthWest: y = 1; x = 1; break;
-                case MoveDirection.NorthEast: y = 1; x = -1; break;
-                case MoveDirection.SouthWest: y = -1; x = 1; break;
-                case MoveDirection.SouthEast: y = -1; x = -1; break;
-                */
+                    /*case MoveDirection.NorthWest: y = 1; x = 1; break;
+                    case MoveDirection.NorthEast: y = 1; x = -1; break;
+                    case MoveDirection.SouthWest: y = -1; x = 1; break;
+                    case MoveDirection.SouthEast: y = -1; x = -1; break;
+                    */
             }
             switch (MainGame.TheMap[bot.X + x, bot.Y + y])
             {
@@ -638,14 +672,14 @@ namespace BattleIAserver
                 case CaseState.Ennemy: // on tamponne un bot adverse
                     if (bot.ShieldLevel >= MainGame.Settings.EnergyLostContactEnemy)
                     {
-                        bot.ShieldLevel-= MainGame.Settings.EnergyLostContactEnemy;
+                        bot.ShieldLevel -= MainGame.Settings.EnergyLostContactEnemy;
                         MainGame.ViewerPlayerShield(bot.X, bot.Y, bot.ShieldLevel);
                     }
                     else
                     {
                         UInt16 tmp = bot.ShieldLevel;
                         bot.ShieldLevel = 0;
-                        tmp = (UInt16)(2*(MainGame.Settings.EnergyLostContactEnemy - tmp));
+                        tmp = (UInt16)(2 * (MainGame.Settings.EnergyLostContactEnemy - tmp));
                         if (bot.Energy >= tmp)
                             bot.Energy -= tmp;
                         else
@@ -692,9 +726,9 @@ namespace BattleIAserver
 
         private async void TouchEnemy(UInt16 x, UInt16 y)
         {
-            foreach(OneBot client in MainGame.AllBot)
+            foreach (OneBot client in MainGame.AllBot)
             {
-                if(client.bot.X == x && client.bot.Y == y)
+                if (client.bot.X == x && client.bot.Y == y)
                 {
                     var pts = await client.IsHit();
                     bot.Score += pts;
@@ -710,10 +744,11 @@ namespace BattleIAserver
             try
             {
                 dir = (MoveDirection)direction;
-            } catch(Exception) { return; }
+            }
+            catch (Exception) { return; }
             int dx = 0;
             int dy = 0;
-            switch(dir)
+            switch (dir)
             {
                 case MoveDirection.North:
                     dy = 1;
@@ -730,9 +765,9 @@ namespace BattleIAserver
             }
             int tx = bot.X + dx;
             int ty = bot.Y + dy;
-            while(tx > 0 && tx < MainGame.Settings.MapWidth && ty > 0 && ty < MainGame.Settings.MapHeight)
+            while (tx > 0 && tx < MainGame.Settings.MapWidth && ty > 0 && ty < MainGame.Settings.MapHeight)
             {
-                if(MainGame.TheMap[tx,ty] == CaseState.Ennemy)
+                if (MainGame.TheMap[tx, ty] == CaseState.Ennemy)
                 {
                     Console.WriteLine($"Bot {bot.Name} shoot from {bot.X}/{bot.Y}");
                     TouchEnemy((ushort)tx, (ushort)ty);
