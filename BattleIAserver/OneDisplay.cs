@@ -56,12 +56,18 @@ namespace BattleIAserver
                     webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, $"[DISPLAY CLOSING] receive {command}", CancellationToken.None);
                     return;
                 }
+                if (command =="S"){
+                    MainGame.RunSimulator();
+                     return;
+                }
                 if (command != "M")
                 {
                     MustRemove = true;
                     await webSocket.CloseAsync(WebSocketCloseStatus.ProtocolError, $"[DISPLAY ERROR] Not the right answer, waiting M#, receive {command}", CancellationToken.None);
+                    break;
                     return;
                 }
+
                 /*if (result.Count < 1)
                 {
                     MustRemove = true;

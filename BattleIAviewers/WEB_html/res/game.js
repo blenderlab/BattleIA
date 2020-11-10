@@ -11,14 +11,17 @@ var img_wall = new Image();
 var img_bot = new Image();
 var img_nrg = new Image();
 var img_empty = new Image();
+var img_respawn = new Image();
 img_wall.src = 'res/tile_wall.png';
 img_empty.src = 'res/tile_empty.png';
 img_nrg.src = 'res/tile_power.png';
 img_bot.src = 'res/tile_robot.png';
+img_respawn.src = 'res/tile_respawn.png';
 var p_wall;
 var p_empty;
 var p_nrg;
 var p_bot;
+var p_respawn;
 	
 window.onload = function()
 {
@@ -26,18 +29,18 @@ window.onload = function()
 	requestAnimationFrame(drawGame);
 	ctx.font = "bold 10pt sans-serif";
 	updateServerState();
-	ctx.scale(0.1,0.1);
 	p_wall = ctx.createPattern(img_wall, 'repeat');
 	p_empty = ctx.createPattern(img_empty, 'repeat');
 	p_nrg = ctx.createPattern(img_nrg, 'repeat');
 	p_bot = ctx.createPattern(img_bot, 'repeat');
-ctx.setTransform(1, 0, 0, 1, 0, 0);
+	p_respawn = ctx.createPattern(img_respawn, 'repeat');
 };
 	
 
 socket.onopen = function(e) {
 	server_state="UP";
-  updateServerState();
+  	updateServerState();
+  
 };
 
 socket.onmessage = function(event) {
@@ -68,18 +71,18 @@ socket.onmessage = function(event) {
 
 socket.onclose = function(event) {
   if (event.wasClean) {
-    //alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+    alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
   } else {
     // e.g. server process killed or network down
     // event.code is usually 1006 in this case
-    //alert('[close] Connection died');
+    alert('[close] Connection died');
   }
   server_state="DOWN";
   updateServerState();
 };
 
 socket.onerror = function(error) {
-  //alert(`[error] ${error.message}`);
+  alert(`[error] ${error.message}`);
   server_state="DOWN";
   updateServerState();
 };
@@ -122,6 +125,7 @@ function updateBots(message){
 	bot_container = document.getElementById( 'bots' );
 	bot_container.innerHTML='';
 	for (i=0;i<nbBots;i++){
+		
 		p=i*13
 		name=""
 		for (j=0;j<9;j++){
@@ -175,6 +179,10 @@ function drawGame()
 				case 4:
 					// Bot 
 					ctx.fillStyle = p_bot;
+					break;
+				case 5:
+					// Respawn 
+					ctx.fillStyle = p_respawn;
 					break;
 				default:
 					ctx.fillStyle = "#5aa457";
