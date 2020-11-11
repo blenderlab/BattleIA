@@ -29,8 +29,6 @@ namespace BattleIAserver
             }
 
             app.UseDefaultFiles();
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions { FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "WebPages")), RequestPath = "/WebPages" });
 
 
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/websockets?view=aspnetcore-2.2
