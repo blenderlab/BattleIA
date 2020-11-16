@@ -20,7 +20,7 @@ namespace BattleIAserver
         /// Numéro de tour dans le jeu
         /// </summary>
         private UInt16 turn = 0;
-
+        static Random rnd = new Random();
         public OneBot(WebSocket webSocket)
         {
             this.webSocket = webSocket;
@@ -296,8 +296,10 @@ namespace BattleIAserver
                                 bot.Name = System.Text.Encoding.UTF8.GetString(buffer, 1, result.Count - 1);
                                 Console.WriteLine($"Le BOT {bot.GUID} se nomme {bot.Name}");
                                 State = BotState.Ready;
+                                //MainGame.SendCockpitInfo(bot.GUID, "N" + bot.Name);
+                                MainGame.RefreshViewer();
                                 await SendMessage("OK");
-                                MainGame.SendCockpitInfo(bot.GUID, "N" + bot.Name);
+
                                 break;
                             }
                             Console.WriteLine($"[ERROR] lost with state {State}");
@@ -454,18 +456,33 @@ namespace BattleIAserver
         public async Task SendDead()
         {
             if (IsEnd) return;
-
-            var buffer = new byte[4];
-            buffer[0] = (byte)Message.m_dead;
-            buffer[1] = (byte)Message.m_respawn;
-            buffer[2] = (byte)Message.m_noRespawn;
-            buffer[3] = (byte)Message.m_responseNoRespawn;
+            var buffer = new byte[1];
             try
             {
-                Console.WriteLine($"Bot {bot.Name} is dead!");
-                await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
-                await respawnBot();
-                //MainGame.ViewerRemovePlayer(bot.X, bot.Y);
+                if (!MainGame.Settings.autoRespawn)
+                {
+                    State = BotState.IsDead;
+                    buffer[0] = (byte)Message.m_dead;
+                    Console.WriteLine($"Bot {bot.Name} is dead!");
+                    await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
+                }
+                else
+                {
+                    
+                    var rand_number = rnd.Next(MainGame.respawnList_X.Count);
+                    Console.WriteLine($"Random number : {rand_number}");
+                    bot.Energy = MainGame.Settings.EnergyStart;
+                    buffer[0] = (byte)Message.m_Respawn;
+                    Console.WriteLine($"Bot {bot.Name} will respawn soon!");
+                    await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
+                    bot.X = (byte)MainGame.respawnList_X[rand_number];
+                    bot.Y = (byte)MainGame.respawnList_Y[rand_number];
+
+                }
+
+
+
+
             }
             catch (Exception err)
             {
@@ -475,34 +492,9 @@ namespace BattleIAserver
             if (MainGame.TheMap[bot.X, bot.Y] == CaseState.Ennemy)
                 MainGame.TheMap[bot.X, bot.Y] = CaseState.Energy;
             MainGame.SendCockpitInfo(bot.GUID, new ArraySegment<byte>(buffer, 0, buffer.Length));
-        }
-        public async Task respawnBot()
-        {
-            var buffer = new byte[1024*6];
-            var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            byte command = buffer[0];
-            Console.WriteLine($"Command : {command}");
-            switch ((Message)command)
-            {
-                case Message.m_respawn:
-                    bot.Energy = MainGame.Settings.EnergyStart;
-                    State = BotState.Ready;
-                    MainGame.SearchEmptyCase();
-                    break;
-                case Message.m_noRespawn:
-                    State = BotState.IsDead;
-                    buffer[0] = (byte)Message.m_responseNoRespawn;
-                    MainGame.ViewerRemovePlayer(bot.X, bot.Y);
-                    if (MainGame.TheMap[bot.X, bot.Y] == CaseState.Ennemy)
-                    {
-                        MainGame.TheMap[bot.X, bot.Y] = CaseState.Energy;
-                    }
-                    MainGame.SendCockpitInfo(bot.GUID, new ArraySegment<byte>(buffer, 0, buffer.Length));
-                    webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
-                    break;
-            }
 
         }
+
         public async Task DoScan(byte size)
         {
             if (IsEnd) return;

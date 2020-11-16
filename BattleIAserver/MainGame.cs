@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace BattleIAserver
 {
@@ -27,6 +28,72 @@ namespace BattleIAserver
         /// L'ensemble des BOTs client connectés
         /// </summary>
         public static List<OneBot> AllBot = new List<OneBot>();
+
+
+        /// <summary>
+        /// Liste des viewers, et lock pour cette liste.
+        /// TODO: Améliorer le système de lock avec un Mutex.
+        /// </summary>
+        private static Object lockListViewer = new Object();
+        public static List<OneDisplay> AllViewer = new List<OneDisplay>();
+        public static List<int> respawnList_X = new List<int>(); // création de la liste
+        public static List<int> respawnList_Y = new List<int>();
+
+        /// <summary>
+        /// Liste des cockpits, et lock pour cette liste.
+        /// TODO: Améliorer le système de lock avec un Mutex.
+        /// </summary>
+        private static Object lockListCockpit = new Object();
+        public static List<OneCockpit> AllCockpit = new List<OneCockpit>();
+
+        /// <summary>
+        /// Sommes-nous dans un tour (?)
+        /// </summary>
+        private static bool turnRunning = false;
+
+        public static void LoadMap(String mapname)
+        {
+            // Read the file as one string.
+            string[] lines = System.IO.File.ReadAllLines(@mapname);
+
+            int mWidth = lines[0].Length; 
+            int mHeight = 0;
+            foreach (string line in lines ){
+                mHeight++;
+            }
+                        // Now we know height & Width :
+            TheMap = new CaseState[mWidth, mHeight];
+            Settings.MapWidth= (UInt16)mWidth;
+            Settings.MapHeight= (UInt16)mHeight;
+
+            //pour chaque ligne du fichier : 
+            int nline = 0;
+        
+            foreach (string line in lines) {
+                Console.WriteLine(line);
+                int nchar = 0;
+               
+                // pour chaque char de la ligne 
+                byte[] b=Encoding.UTF8.GetBytes(line);
+                // For each character of the line :
+                foreach (char c in line)  {
+                    // force each character to be read as an integer 
+                    // The cast it into a CaseState 
+                    TheMap[nchar,nline]= (CaseState)int.Parse(c.ToString());
+                    if(TheMap[nchar,nline] == CaseState.Respawn)
+                    {
+                        respawnList_X.Add(nchar);
+                        respawnList_Y.Add(nline);
+                    }
+                    nchar++; 
+                }
+                nline++;
+            }
+            Console.WriteLine($"[MAP] Name : {mapname}");
+            Console.WriteLine($"[MAP] Size : {mWidth}x{mHeight}");
+            respawnList_X.ForEach(Console.WriteLine);
+            respawnList_Y.ForEach(Console.WriteLine);
+        }
 
 
         /// <summary>
@@ -112,11 +179,30 @@ namespace BattleIAserver
             return xy;
         }
 
+        public static MapXY SearchRespawnCase()
+        {
+            bool spawnCase = false;
+            MapXY xy = new MapXY();
+            
+            do
+            {
+                xy.X = (byte)(RND.Next(Settings.MapWidth - 2) + 1);
+                xy.Y = (byte)(RND.Next(Settings.MapHeight - 2) + 1);
+              
 
+                if (TheMap[xy.X, xy.Y] == CaseState.Respawn)
+                {
+                    spawnCase = true;
+                    Console.WriteLine($"Coordonées respawn case : X : {xy.X} Y :{xy.Y}  ");
+       
+                }
+            } while (!spawnCase);
+            return xy;
+        }
         public static void SendMapInfoToCockpit(Guid guid)
         {
             var buffer = new byte[5 + Settings.MapWidth * MainGame.Settings.MapHeight];
-            buffer[0] = System.Text.Encoding.ASCII.GetBytes("M")[0];
+            buffer[0] = (byte)Message.m_Map;
             buffer[1] = (byte)Settings.MapWidth;
             buffer[2] = (byte)(Settings.MapWidth >> 8);
             buffer[3] = (byte)Settings.MapHeight;
@@ -125,7 +211,7 @@ namespace BattleIAserver
             for (int j = 0; j < MainGame.Settings.MapHeight; j++)
                 for (int i = 0; i < MainGame.Settings.MapWidth; i++)
                 {
-                    switch(MainGame.TheMap[i, j])
+                    switch (MainGame.TheMap[i, j])
                     {
                         case CaseState.Wall:
                         case CaseState.Empty:
@@ -140,7 +226,7 @@ namespace BattleIAserver
         }
 
 
-        private static bool turnRunning = false;
+
 
         /// <summary>
         /// Exécute la simulation dans son ensemble !
@@ -167,7 +253,8 @@ namespace BattleIAserver
                 }
                 if (count == 0)
                 {
-                    if(Settings.EndlessMode)
+                    if (Settings.EndlessMode)
+         
                     {
                         // Disabled: Will spam the console until a bot joins.
                         // Console.WriteLine("Last bot left. Endless mode is active, continuing");
@@ -177,7 +264,6 @@ namespace BattleIAserver
                         Console.WriteLine("No more BOT, ending simulator.");
                         turnRunning = false;
                     }
-                    
                 }
                 else
                 {
@@ -186,7 +272,7 @@ namespace BattleIAserver
                         Console.WriteLine($"Turn #{turnCount} Bot {bots[i].bot.Name}");
                         await bots[i].StartNewTurn();
                         DateTime start = DateTime.UtcNow;
-                        while((bots[i].State != BotState.Ready) && (DateTime.UtcNow - start).TotalSeconds < Settings.MaxDelaySecondByTurn)
+                        while ((bots[i].State != BotState.Ready) && (DateTime.UtcNow - start).TotalSeconds < Settings.MaxDelaySecondByTurn)
                         {
                             Thread.Sleep(2);
                         }
@@ -200,7 +286,7 @@ namespace BattleIAserver
                     // on génère de l'énergie si nécessaire
                     MainGame.RefuelMap();
                     turnCount++;
-                    if(turnCount % MainGame.Settings.EnergyPodLessEvery == 0)
+                    if (turnCount % MainGame.Settings.EnergyPodLessEvery == 0)
                     {
                         if (Settings.EnergyPodMax > Settings.EnergyPodMin)
                             Settings.EnergyPodMax--;
@@ -210,8 +296,7 @@ namespace BattleIAserver
             Console.WriteLine("End of running.");
         }
 
-        private static Object lockListCockpit = new Object();
-        public static List<OneCockpit> AllCockpit = new List<OneCockpit>();
+
 
         public static async Task AddCockpit(WebSocket webSocket)
         {
@@ -281,10 +366,6 @@ namespace BattleIAserver
             }
         }
 
-
-
-        private static Object lockListViewer = new Object();
-        public static List<OneDisplay> AllViewer = new List<OneDisplay>();
 
         /// <summary>
         /// Un nouveau VIEWER de la simulation
@@ -358,15 +439,12 @@ namespace BattleIAserver
                 AllBot.Add(client);
             };
             // fin du ménage
+            RefreshViewer();
             //Console.WriteLine("Do it!");
             foreach (OneBot o in toRemove)
                 RemoveBot(o.ClientGuid);
             Console.WriteLine($"#bots: {AllBot.Count}");
-            RefreshViewer();
-            /*Console.WriteLine("Starting thread");
-            Thread t = new Thread(DoTurns);
-            t.Start();*/
-
+          
             // on se met à l'écoute des messages de ce client
             await client.WaitReceive();
             // arrivé ici, c'est que le client s'est déconnecté
@@ -380,11 +458,11 @@ namespace BattleIAserver
             {
                 foreach (OneBot o in AllBot)
                 {
-                    if(o.bot.X == ex && o.bot.Y == ey)
+                    if (o.bot.X == ex && o.bot.Y == ey)
                     {
                         if (o.bot.CloakLevel == 0)
                             return CaseState.Ennemy;
-                        if((Math.Abs(ex - px) <= o.bot.CloakLevel) && (Math.Abs(ey - py) <= o.bot.CloakLevel))
+                        if ((Math.Abs(ex - px) <= o.bot.CloakLevel) && (Math.Abs(ey - py) <= o.bot.CloakLevel))
                             return CaseState.Empty;
                         return CaseState.Ennemy;
                     }
@@ -398,7 +476,7 @@ namespace BattleIAserver
         public static void RunSimulator()
         {
             //Thread t = new Thread(DoTurns);
-            if(SimulatorThread.IsAlive)
+            if (SimulatorThread.IsAlive)
             {
                 Console.WriteLine("Simulator is already running.");
                 return;
@@ -441,7 +519,7 @@ namespace BattleIAserver
             if (toRemove != null)
             {
                 ViewerRemovePlayer(toRemove.bot.X, toRemove.bot.Y);
-                //RefreshViewer();
+                RefreshViewer();
             }
             Console.WriteLine($"#bots: {AllBot.Count}");
         }
@@ -471,9 +549,9 @@ namespace BattleIAserver
             {
                 foreach (OneDisplay o in AllViewer)
                 {
-                 o.SendMapInfo();
-                 o.SendBotInfo();
-                    
+                    o.SendMapInfo();
+
+                    o.SendBotInfo();
                 }
             }
         }
