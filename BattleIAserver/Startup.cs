@@ -92,7 +92,7 @@ namespace BattleIAserver
                     }
                 }
                   
-                    }); 
+            }); 
 
         }
     }
