@@ -1,3 +1,5 @@
+![BAttleIA Logo](https://raw.githubusercontent.com/blenderlab/BattleIA/master/Design/logo_blue.png "BAttleIA")
+
 # BattleIA : a Technologic School Project
 
 BattleIA is a project to teach & learn programming, algorithms, and project management.
