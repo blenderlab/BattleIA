@@ -15,7 +15,19 @@
     <None Update="settings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+
   </ItemGroup>
+  
+  <Target Name="Maps" AfterTargets="Build">
+     <MakeDir Directories="$(OutDir)Maps" />
+  </Target>
+
+<ItemGroup>
+    <Content Include="Maps\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>  
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\BattleIA.Common\BattleIA.Common.csproj" />
   </ItemGroup>

@@ -7,6 +7,8 @@ using System;
 using System.IO;
 using System.Net.WebSockets;
 
+using System.Threading;
+using System.Threading.Tasks;
 namespace BattleIAserver
 {
     public class Startup
@@ -91,6 +93,66 @@ namespace BattleIAserver
                         Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
                     }
                 }
+
+                if (context.Request.Path == "/startsim")
+                {
+                    Console.WriteLine("WebSocket /startsim");
+                    if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        MainGame.RunSimulator();
+                        Console.WriteLine($"[SIM]: Start simulation");
+                        context.Response.StatusCode = 200;
+
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 400;
+                        Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
+                    }
+                }
+
+                if (context.Request.Path == "/stopsim")
+                {
+                    Console.WriteLine("WebSocket /stopsim");
+                    if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        MainGame.StopSimulator();
+                        Console.WriteLine($"[SIM]: Stop simulation");
+                        context.Response.StatusCode = 200;
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 400;
+                        Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
+                    }
+                }
+                if (context.Request.Path == "/statsim")
+                {
+                    Console.WriteLine("WebSocket /statsim");
+                    if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        MainGame.StopSimulator();
+                        Console.WriteLine($"[SIM]: Ask server status ");
+                        context.Response.StatusCode = 200;
+                        var buffer = new byte[4];
+                        buffer[0] = MainGame.isRunning();
+                        buffer[1] = (byte)MainGame.AllBot.Count;
+                        buffer[2] = (byte)MainGame.TheMap.Length;
+                        buffer[3] = (byte)MainGame.TheMap.Length;
+                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                        await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
+                        await webSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);                         
+                        Console.WriteLine($"[SIM]: Status sent ! ");
+
+                    }
+                    
+                    else
+                    {
+                        context.Response.StatusCode = 400;
+                        Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
+                    }
+                }
+
                   
             }); 
 

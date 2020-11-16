@@ -51,6 +51,15 @@ namespace BattleIAserver
         /// </summary>
         private static bool turnRunning = false;
 
+
+        public static byte isRunning(){
+            if (turnRunning) {
+                return (1);
+            } else {
+                return (0);
+            }
+           
+        }
         public static void LoadMap(String mapname)
         {
             // Read the file as one string.
