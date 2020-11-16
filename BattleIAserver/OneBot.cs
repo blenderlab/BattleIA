@@ -468,16 +468,19 @@ namespace BattleIAserver
                 }
                 else
                 {
-                    
                     var rand_number = rnd.Next(MainGame.respawnList_X.Count);
                     Console.WriteLine($"Random number : {rand_number}");
                     bot.Energy = MainGame.Settings.EnergyStart;
                     buffer[0] = (byte)Message.m_Respawn;
                     Console.WriteLine($"Bot {bot.Name} will respawn soon!");
                     await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
-                    bot.X = (byte)MainGame.respawnList_X[rand_number];
-                    bot.Y = (byte)MainGame.respawnList_Y[rand_number];
-
+                    MapXY xy = MainGame.SearchEmptyCase();
+                    if (MainGame.respawnList_X[rand_number] == xy.X && MainGame.respawnList_Y[rand_number] == xy.Y)
+                    {
+                        bot.X = (byte)MainGame.respawnList_X[rand_number];
+                        bot.Y = (byte)MainGame.respawnList_Y[rand_number];
+                        State = BotState.IsRespawned;
+                    }
                 }
 
 
@@ -491,7 +494,7 @@ namespace BattleIAserver
             }
             if (MainGame.TheMap[bot.X, bot.Y] == CaseState.Ennemy)
                 MainGame.TheMap[bot.X, bot.Y] = CaseState.Energy;
-            MainGame.SendCockpitInfo(bot.GUID, new ArraySegment<byte>(buffer, 0, buffer.Length));
+                MainGame.SendCockpitInfo(bot.GUID, new ArraySegment<byte>(buffer, 0, buffer.Length));
 
         }
 

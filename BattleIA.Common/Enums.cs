@@ -12,28 +12,30 @@
         WaitingAnswerD = 6,
         WaitingAction = 7,
         IsDead = 8,
+        IsRespawned = 9
     }
 
-    public enum Message : byte 
+    public enum Message : byte
     {
-         m_dead = (byte)'D',
-         m_mapInfos = (byte)'I',
-         m_OK = (byte)'O',
-         m_yourTurn=(byte)'T',
-         m_newInfos=(byte)'C',
-         m_Map = (byte)'M',
-         m_Position = (byte)'P',
-         m_respawn = (byte)'R',
-         m_noRespawn = (byte)'B',
-         m_responseNoRespawn = (byte)'W'
+        m_dead = (byte)'D',
+        m_mapInfos = (byte)'I',
+        m_OK = (byte)'O',
+        m_yourTurn = (byte)'T',
+        m_newInfos = (byte)'C',
+        m_Map = (byte)'M',
+        m_Position = (byte)'P',
+        m_Respawn = (byte)'R'
+
+
     }
     public enum CaseState : byte
     {
         Empty = 0,
-        // OurBot = 1,
+        OurBot = 1,
         Wall = 2,
         Energy = 3,
         Ennemy = 4,
+        Respawn = 5,
     }
 
     public enum BotAction : byte
@@ -52,6 +54,7 @@
         Position = 3,
         Turn = 9,
         Change = 11,
+        Respawn = 1
     }
 
     public enum MoveDirection : byte

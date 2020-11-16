@@ -166,6 +166,7 @@ namespace BattleIAserver
         public static MapXY SearchEmptyCase()
         {
             bool ok = false;
+           
             MapXY xy = new MapXY();
             do
             {
@@ -176,27 +177,6 @@ namespace BattleIAserver
                     ok = true;
                 }
             } while (!ok);
-            return xy;
-        }
-
-        public static MapXY SearchRespawnCase()
-        {
-            bool spawnCase = false;
-            MapXY xy = new MapXY();
-            
-            do
-            {
-                xy.X = (byte)(RND.Next(Settings.MapWidth - 2) + 1);
-                xy.Y = (byte)(RND.Next(Settings.MapHeight - 2) + 1);
-              
-
-                if (TheMap[xy.X, xy.Y] == CaseState.Respawn)
-                {
-                    spawnCase = true;
-                    Console.WriteLine($"Coordonées respawn case : X : {xy.X} Y :{xy.Y}  ");
-       
-                }
-            } while (!spawnCase);
             return xy;
         }
         public static void SendMapInfoToCockpit(Guid guid)

@@ -28,7 +28,7 @@ namespace BattleIAserver
         public UInt16 EnergyLostByCloak = 5;
 
         public UInt16 EnergyStart = 100;
-        public UInt16 EnergyLostByTurn = 50;
+        public UInt16 EnergyLostByTurn = 1;
         public UInt16 EnergyLostByShield = 1;
         public UInt16 EnergyLostByMove = 1;
         public UInt16 EnergyLostShot = 2;
