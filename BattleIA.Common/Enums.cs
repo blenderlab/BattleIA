@@ -36,6 +36,11 @@
         Energy = 3,
         Ennemy = 4,
         Respawn = 5,
+        Return_to_Start = 6,
+        Race_Finish = 7,
+        Spawn_T1 = 8,
+        Spawn_T2 = 9,
+        Poison = [P],
     }
 
     public enum BotAction : byte
