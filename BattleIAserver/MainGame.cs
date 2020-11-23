@@ -44,8 +44,8 @@ namespace BattleIAserver
         /// </summary>
         private static Object lockListCockpit = new Object();
         public static List<OneCockpit> AllCockpit = new List<OneCockpit>();
-
-
+        public static List<int> respawnList_X = new List<int>(); // création de la liste
+        public static List<int> respawnList_Y = new List<int>();
         /// <summary>
         /// Sommes-nous dans un tour (?)
         /// </summary>
@@ -88,13 +88,21 @@ namespace BattleIAserver
                     // force each character to be read as an integer 
                     // The cast it into a CaseState 
                     TheMap[nchar,nline]= (CaseState)int.Parse(c.ToString());
-                    nchar++; 
+                    if (TheMap[nchar, nline] == CaseState.Respawn)
+                    {
+                        respawnList_X.Add(nchar);
+                        respawnList_Y.Add(nline);
+                    }
+                    nchar++;
                 }
                 nline++;
             }
             Console.WriteLine($"[MAP] Name : {mapname}");
             Console.WriteLine($"[MAP] Size : {mWidth}x{mHeight}");
+            respawnList_X.ForEach((int x) => { BattleLogger.logger.info($"x: {x}"); });
+            respawnList_Y.ForEach((int y) => { BattleLogger.logger.info($"x: {y}"); });
         }
+      
 
 
         /// <summary>

@@ -1,4 +1,3 @@
-
 {
   "ServerPort": 4626,
   "DelayBetweenEachBotTurn": 500,
@@ -7,7 +6,7 @@
   "MapPercentWall": 3,
   "MapPercentEnergy": 5,
   "EnergyStart": 100,
-  "EnergyLostByTurn": 1,
+  "EnergyLostByTurn": 50,
   "EnergyLostByShield": 1,
   "EnergyLostByCloak": 1,
   "EnergyLostByMove": 1,
@@ -18,6 +17,7 @@
   "PointByEnergyFound": 8,
   "PointByEnnemyTouch": 20,
   "PointByEnnemyKill": 70,
-  "EndlessMode":  true,
-  "MapName": ""
+  "EndlessMode": true,
+  "autoRespawn": true,
+  "MapName": "map_1.txt"
 }
