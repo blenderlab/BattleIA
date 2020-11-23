@@ -41,7 +41,7 @@ The source code has to be forked by each student on its how account, to make all
 
 ### Website
 
-Will be hosted on [http://battleia.fr] 
+Will be hosted on [http://www.battle-ia.fr] 
 
 ### Logo & Visuals 
 
