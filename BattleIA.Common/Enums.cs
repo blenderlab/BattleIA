@@ -1,4 +1,4 @@
-﻿namespace BattleIA
+namespace BattleIA
 {
 
     public enum BotState : byte
