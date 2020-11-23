@@ -189,6 +189,33 @@ namespace BattleIAserver
         }
 
 
+        /// <summary>
+        /// Recherche une case vide de respawn dans le terrain de simulation
+        /// </summary>
+        /// <param name="x">Retourne le X de la case trouvée</param>
+        /// <param name="y">Retourne le Y de la case trouvée</param>
+        public static MapXY SearchRespawnCase()
+        {
+                        var rnd = new Random();
+
+            bool ok = false;
+            MapXY xy = new MapXY();
+            do
+            {   
+                // index au hasard parmis les cases de resapwn :
+                var rand_number = rnd.Next(respawnList_X.Count-1);
+               
+                if (TheMap[respawnList_X[rand_number], respawnList_X[rand_number]] == CaseState.Respawn)
+                {
+                    ok = true;
+                    xy.X=(byte)respawnList_X[rand_number];
+                    xy.Y=(byte)respawnList_Y[rand_number];
+                }
+            } while (!ok);
+            return xy;
+        }
+
+
         public static void SendMapInfoToCockpit(Guid guid)
         {
             var buffer = new byte[5 + Settings.MapWidth * MainGame.Settings.MapHeight];

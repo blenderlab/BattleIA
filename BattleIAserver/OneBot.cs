@@ -478,7 +478,7 @@ namespace BattleIAserver
                     bot.X = xy.X;
                     bot.Y = xy.Y;
                     State = BotState.IsRespawned;
-                    }
+                    
                 }
             }
             catch (Exception err)
