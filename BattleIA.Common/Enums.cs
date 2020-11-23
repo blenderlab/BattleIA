@@ -46,6 +46,7 @@
         Spawn_T1 = 8,
         Spawn_T2 = 9,
         Poison = (byte)'P',
+
     }
 
     public enum BotAction : byte
