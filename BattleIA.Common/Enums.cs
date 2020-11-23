@@ -28,6 +28,11 @@
 
 
     }
+
+    /*
+    Empty =
+
+    */
     public enum CaseState : byte
     {
         Empty = 0,
@@ -40,7 +45,8 @@
         Race_Finish = 7,
         Spawn_T1 = 8,
         Spawn_T2 = 9,
-        Poison = [P],
+        Poison = (byte)'P',
+
     }
 
     public enum BotAction : byte

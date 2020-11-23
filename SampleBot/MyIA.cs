@@ -27,6 +27,7 @@ namespace SampleBot
             }
         }
         public bool Walkable;
+        
         public GridPoint(Vector2 pos, bool walkable=true, float weight = 1)
         {
             Parent = null;
