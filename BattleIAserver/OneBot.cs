@@ -477,7 +477,7 @@ namespace BattleIAserver
                     MapXY xy = MainGame.SearchRespawnCase();
                     bot.X = xy.X;
                     bot.Y = xy.Y;
-                    State = BotState.IsRespawned;
+                    State = BotState.Ready;
                     
                 }
             }
