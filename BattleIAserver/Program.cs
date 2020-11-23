@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace BattleIAserver
 {
@@ -12,21 +14,26 @@ namespace BattleIAserver
             var currentDir = Directory.GetCurrentDirectory();
             var theFile = Path.Combine(currentDir, "settings.json");
             // création du fichier settings.json avec les valeurs par défaut
+            var serializeOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
             if (!File.Exists(theFile))
             {
                 MainGame.Settings = new Settings();
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(MainGame.Settings, Newtonsoft.Json.Formatting.Indented);
+                string json = JsonSerializer.Serialize<Settings>(MainGame.Settings,serializeOptions);
+                Console.WriteLine(json);
                 File.WriteAllText(theFile, json);
             }
-            var prm = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(File.ReadAllText(theFile));
+            var prm =  JsonSerializer.Deserialize<Settings>(File.ReadAllText(theFile));
             MainGame.Settings = prm;
             if (MainGame.Settings.MapName != ""){
                 MainGame.LoadMap(MainGame.Settings.MapName);
             } else {
                 MainGame.InitNewMap();
             }
-        
-            
+                
 
             var host = new WebHostBuilder()
             .UseKestrel()

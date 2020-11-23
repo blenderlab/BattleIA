@@ -79,7 +79,7 @@ namespace BattleIAserver
             int nline = 0;
         
             foreach (string line in lines) {
-                Console.WriteLine(line);
+                //Console.WriteLine(line);
                 int nchar = 0;
                 // pour chaque char de la ligne 
                 byte[] b=Encoding.UTF8.GetBytes(line);
