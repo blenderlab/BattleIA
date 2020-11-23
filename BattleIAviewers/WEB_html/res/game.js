@@ -50,7 +50,7 @@ socket.onmessage = function(event) {
 
 	if (message[0]=="M"){
 		console.log('[MSG] Map info ');
-		//updatemap(message)
+		updatemap(message)
 	}
 	if (message[0]=="P"){
 		console.log('[MSG] Move player ');

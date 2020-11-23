@@ -474,12 +474,10 @@ namespace BattleIAserver
                     buffer[0] = (byte)Message.m_Respawn;
                     BattleLogger.logger.info($"Bot {bot.Name} will respawn soon!");
                     await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
-                    MapXY xy = MainGame.SearchEmptyCase();
-                    if (MainGame.respawnList_X[rand_number] == xy.X && MainGame.respawnList_Y[rand_number] == xy.Y)
-                    {
-                        bot.X = (byte)MainGame.respawnList_X[rand_number];
-                        bot.Y = (byte)MainGame.respawnList_Y[rand_number];
-                        State = BotState.IsRespawned;
+                    MapXY xy = MainGame.SearchRespawnCase();
+                    bot.X = xy.X;
+                    bot.Y = xy.Y;
+                    State = BotState.IsRespawned;
                     }
                 }
             }

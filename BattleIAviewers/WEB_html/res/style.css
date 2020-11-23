@@ -72,6 +72,8 @@
 		margin-right:auto;
 
 	}
+
+
 	 dl {
     display: flex;
     flex-flow: row wrap;
@@ -92,4 +94,11 @@
     padding: 2px 4px;
     border-bottom: 0px solid #333;
     color:#FFF;
+  }
+
+  #controls .button{
+  	width:50%;
+  	margin:2px 25% 2px 25%;
+  	clear:both;
+
   }

@@ -100,7 +100,7 @@ namespace BattleIAserver
             Console.WriteLine($"[MAP] Name : {mapname}");
             Console.WriteLine($"[MAP] Size : {mWidth}x{mHeight}");
             respawnList_X.ForEach((int x) => { BattleLogger.logger.info($"x: {x}"); });
-            respawnList_Y.ForEach((int y) => { BattleLogger.logger.info($"x: {y}"); });
+            respawnList_Y.ForEach((int y) => { BattleLogger.logger.info($"y: {y}"); });
         }
       
 
