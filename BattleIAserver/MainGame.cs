@@ -99,8 +99,11 @@ namespace BattleIAserver
             }
             Console.WriteLine($"[MAP] Name : {mapname}");
             Console.WriteLine($"[MAP] Size : {mWidth}x{mHeight}");
-            respawnList_X.ForEach((int x) => { BattleLogger.logger.info($"x: {x}"); });
-            respawnList_Y.ForEach((int y) => { BattleLogger.logger.info($"y: {y}"); });
+            Console.WriteLine($"[MAP] Respawn : {respawnList_X.Count}");
+            
+
+           // respawnList_X.ForEach((int x) => { BattleLogger.logger.info($"x: {x}"); });
+           // respawnList_Y.ForEach((int y) => { BattleLogger.logger.info($"y: {y}"); });
         }
       
 
@@ -196,15 +199,19 @@ namespace BattleIAserver
         /// <param name="y">Retourne le Y de la case trouvée</param>
         public static MapXY SearchRespawnCase()
         {
-                        var rnd = new Random();
-
-            bool ok = false;
             MapXY xy = new MapXY();
+            // If no respawn, try to find an empty case :
+            if (respawnList_X.Count==0){
+                xy = SearchEmptyCase();
+                return xy;
+            }
+
+            var rnd = new Random();
+            bool ok = false;
             do
             {   
                 // index au hasard parmis les cases de resapwn :
                 var rand_number = rnd.Next(respawnList_X.Count-1);
-               
                 if (TheMap[respawnList_X[rand_number], respawnList_X[rand_number]] == CaseState.Respawn)
                 {
                     ok = true;

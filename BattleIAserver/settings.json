@@ -6,7 +6,7 @@
   "MapPercentWall": 3,
   "MapPercentEnergy": 5,
   "EnergyStart": 100,
-  "EnergyLostByTurn": 50,
+  "EnergyLostByTurn": 1,
   "EnergyLostByShield": 1,
   "EnergyLostByCloak": 1,
   "EnergyLostByMove": 1,
@@ -19,5 +19,5 @@
   "PointByEnnemyKill": 70,
   "EndlessMode": true,
   "autoRespawn": true,
-  "MapName": "map_1.txt"
+  "MapName": "Maps/map_1.txt"
 }

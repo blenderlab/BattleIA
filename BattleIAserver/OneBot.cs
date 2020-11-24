@@ -455,8 +455,9 @@ namespace BattleIAserver
 
         public async Task SendDead()
         {
-            var rnd = new Random();
             if (IsEnd) return;
+            var rnd = new Random();
+
             var buffer = new byte[1];
             try
             {
@@ -464,21 +465,25 @@ namespace BattleIAserver
                 {
                     State = BotState.IsDead;
                     buffer[0] = (byte)Message.m_dead;
-                    Console.WriteLine($"Bot {bot.Name} is dead!");
+                    BattleLogger.logger.info($"Bot {bot.Name} is dead!");
                     await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
                 }
                 else
                 {
-                    var rand_number = rnd.Next(MainGame.respawnList_X.Count-1);
                     bot.Energy = MainGame.Settings.EnergyStart;
-                    buffer[0] = (byte)Message.m_Respawn;
                     BattleLogger.logger.info($"Bot {bot.Name} will respawn soon!");
+                    buffer[0] = (byte)Message.m_Respawn;
                     await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
+                    
+                    byte oldx =bot.X;
+                    byte oldy=bot.Y;
                     MapXY xy = MainGame.SearchRespawnCase();
                     bot.X = xy.X;
                     bot.Y = xy.Y;
+                    MainGame.TheMap[oldx,oldy]=CaseState.Empty;
                     State = BotState.Ready;
-                    
+                    MainGame.ViewerMovePlayer(oldx,oldy,bot.X,bot.Y);
+                    MainGame.RefreshViewer();
                 }
             }
             catch (Exception err)

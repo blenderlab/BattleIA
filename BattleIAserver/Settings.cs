@@ -28,7 +28,7 @@ namespace BattleIAserver
         public UInt16 EnergyLostByCloak = 5;
 
         public UInt16 EnergyStart = 100;
-        public UInt16 EnergyLostByTurn = 50;
+        public UInt16 EnergyLostByTurn = 1;
         public UInt16 EnergyLostByShield = 1;
         public UInt16 EnergyLostByMove = 1;
         public UInt16 EnergyLostShot = 2;
@@ -39,7 +39,7 @@ namespace BattleIAserver
         public UInt16 PointByEnergyFound = 8;
         public UInt16 PointByEnnemyTouch = 80;
         public UInt16 PointByEnnemyKill = 200;
-        public String MapName = "Maps/map_1.txt";
+        public String MapName = "Maps/map_4.txt";
 
     }
 }

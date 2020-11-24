@@ -56,6 +56,13 @@ namespace BattleIAserver
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, $"[DISPLAY CLOSING] receive {command}", CancellationToken.None);
                     return;
                 }
+                if (command == "*")
+                {
+                    var b = new byte[1];
+                    b[0]=(byte)'*';
+                    await webSocket.SendAsync(new ArraySegment<byte>(b, 0, 1), WebSocketMessageType.Text, true, CancellationToken.None);
+                    return;
+                }
                 if (command =="S"){
                     MainGame.RunSimulator();
                      return;

@@ -21,9 +21,9 @@ namespace BattleIAserver
             };
             if (!File.Exists(theFile))
             {
+                Console.WriteLine("Settings not found....");
                 MainGame.Settings = new Settings();
                 string json = JsonSerializer.Serialize<Settings>(MainGame.Settings,serializeOptions);
-                Console.WriteLine(json);
                 File.WriteAllText(theFile, json);
             }
             var prm =  JsonSerializer.Deserialize<Settings>(File.ReadAllText(theFile));
