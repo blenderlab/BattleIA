@@ -39,7 +39,7 @@ namespace BattleIAserver
         public UInt16 PointByEnergyFound = 8;
         public UInt16 PointByEnnemyTouch = 80;
         public UInt16 PointByEnnemyKill = 200;
-        public String MapName = "Maps/map_4.txt";
+        public String MapName = "map_1.txt";
 
     }
 }

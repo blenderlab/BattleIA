@@ -19,5 +19,5 @@
   "PointByEnnemyKill": 70,
   "EndlessMode": true,
   "autoRespawn": true,
-  "MapName": "Maps/map_1.txt"
+  "MapName": "map_1.txt"
 }

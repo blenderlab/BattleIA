@@ -63,6 +63,7 @@ namespace BattleIAserver
         public static void LoadMap(String mapname)
         {
             // Read the file as one string.
+            mapname="Maps/"+mapname;
             string[] lines = System.IO.File.ReadAllLines(@mapname);
         
             int mWidth = lines[0].Length; 
