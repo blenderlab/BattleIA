@@ -1,12 +1,16 @@
+
+
 var ctx = null;
 var gameMap = [];
 var tileW = 12, tileH = 12;
 var mapW = 10, mapH = 10;
 var currentSecond = 0, frameCount = 0, framesLastSecond = 0;
-var server_ip = "cloud.blenderlab.fr";
-var server_port = "8082";
+var server_ip = "localhost";
+var server_port = "4626";
 var server_state = "DOWN";
+
 let socket = new WebSocket("ws://"+server_ip+":"+server_port+"/display");
+
 var img_wall = new Image();
 var img_bot = new Image();
 var img_nrg = new Image();
@@ -35,7 +39,15 @@ window.onload = function()
 	p_bot = ctx.createPattern(img_bot, 'repeat');
 	p_respawn = ctx.createPattern(img_respawn, 'repeat');
 };
-	
+function ping() {
+        socket.send('*');
+        tm = setTimeout(function () {
+    }, 5000);
+}
+
+function pong() {
+    clearTimeout(tm);
+}	
 
 socket.onopen = function(e) {
 	server_state="UP";
@@ -47,7 +59,10 @@ socket.onopen = function(e) {
 
 socket.onmessage = function(event) {
  var  message = (event.data);
-
+    if (message[0] == '*') {
+        pong();
+        return;
+    }
 	if (message[0]=="M"){
 		console.log('[MSG] Map info ');
 		updatemap(message)
@@ -75,21 +90,14 @@ socket.onclose = function(event) {
   if (event.wasClean) {
     alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
   } else {
-    // e.g. server process killed or network down
-    // event.code is usually 1006 in this case
-    alert('[close] Connection died');
-  }
-   	alert('Onclose called' + event);
-    alert('code is' + event.code);
-    alert('reason is ' + event.reason);
-    alert('wasClean  is' + event.wasClean);
+   let socket = new WebSocket("ws://"+server_ip+":"+server_port+"/display");
 
+  }
   server_state="DOWN";
   updateServerState();
 };
 
 socket.onerror = function(error) {
-  alert(`[error] ${error.message}`);
   server_state="DOWN";
   updateServerState();
 };

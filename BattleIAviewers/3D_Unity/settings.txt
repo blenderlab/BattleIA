@@ -1,1 +1,1 @@
-ws://127.0.0.1:4626/display
+ws://cloud.blenderlab.fr:8082/display
