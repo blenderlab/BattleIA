@@ -1,6 +1,9 @@
-using Microsoft.AspNetCore.Hosting;
 using System;
 using System.IO;
+using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Net;
+using System.Diagnostics;
 
 namespace BattleIAserver
 {
@@ -26,16 +29,32 @@ namespace BattleIAserver
                 MainGame.InitNewMap();
             }
         
-            
+            Server server = new Server(new IPEndPoint(IPAddress.Parse("127.0.0.1"), MainGame.Settings.ServerPort));
+   /*
+             * Bind required events for the server
+             */
 
-            var host = new WebHostBuilder()
-            .UseKestrel()
-            .UseStartup<Startup>()
-            .ConfigureKestrel((context, options) => { options.ListenAnyIP(MainGame.Settings.ServerPort); })
-            .Build();
+            server.OnClientConnected += (object sender, OnClientConnectedHandler e) => 
+            {
+                Console.WriteLine("Client with GUID: {0} Connected!", e.GetClient().GetGuid());
+            };
 
-            host.Start();                     //Start server non-blocking
+            server.OnClientDisconnected += (object sender, OnClientDisconnectedHandler e) =>
+            {
+                Console.WriteLine("Client {0} Disconnected", e.GetClient().GetGuid());
+            };
 
+            server.OnMessageReceived += (object sender, OnMessageReceivedHandler e) =>
+            {
+                Console.WriteLine("Received Message: '{1}' from client: {0}", e.GetClient().GetGuid(), e.GetMessage());
+            };
+
+            server.OnSendMessage += (object sender, OnSendMessageHandler e) =>
+            {
+                Console.WriteLine("Sent message: '{0}' to client {1}", e.GetMessage(), e.GetClient().GetGuid());
+            };
+
+            // Close the application only when the close button is clicked
             ShowHelp();
             bool exit = false;
             while (!exit)
@@ -93,7 +112,7 @@ namespace BattleIAserver
                         break;
                 }
             }
-            host.StopAsync();
+                        Process.GetCurrentProcess().WaitForExit();
         }
 
         public static void ShowHelp()
