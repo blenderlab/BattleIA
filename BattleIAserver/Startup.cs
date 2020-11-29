@@ -34,12 +34,18 @@ namespace BattleIAserver
 
             app.UseDefaultFiles();
 
-            app.UseWebSockets();
-       
+            var webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(30),
+                ReceiveBufferSize = 4 * 1024
+            };
+
+            app.UseWebSockets(webSocketOptions);       
 
             // ICI on fonctionne en THREAD !
             app.Use(async (context, next) =>
             {
+                bool wsok=false;
                 Console.WriteLine("New WebSocket connection");
                 // ouverture d'une websocket, un nouveau bot se connecte
                 if (context.Request.Path == "/bot")
@@ -47,6 +53,7 @@ namespace BattleIAserver
                     Console.WriteLine("WebSocket /bot");
                     if (context.WebSockets.IsWebSocketRequest)
                     {
+                        wsok=true;
                         //Console.WriteLine("AcceptWebSocketAsync");
                         // on l'ajoute à notre simulation !
                         WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
@@ -67,6 +74,7 @@ namespace BattleIAserver
                     Console.WriteLine("[SOCKET] WebSocket /display");
                     if (context.WebSockets.IsWebSocketRequest)
                     {
+                        wsok=true;
                         // on l'ajoute à notre simulation !
                         WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                         Console.WriteLine("[DISPLAY] New DISPLAY!");
@@ -84,6 +92,7 @@ namespace BattleIAserver
                     Console.WriteLine("WebSocket /cockpit");
                     if (context.WebSockets.IsWebSocketRequest)
                     {
+                        wsok=true;
                         // on l'ajoute à notre simulation !
                         WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                         Console.WriteLine("New COCKPIT!");
@@ -102,6 +111,7 @@ namespace BattleIAserver
                     Console.WriteLine("WebSocket /startsim");
                     if (context.WebSockets.IsWebSocketRequest)
                     {
+                        wsok=true;
                         MainGame.RunSimulator();
                         Console.WriteLine($"[SIM]: Start simulation");
                         context.Response.StatusCode = 200;
@@ -119,6 +129,7 @@ namespace BattleIAserver
                     Console.WriteLine("WebSocket /stopsim");
                     if (context.WebSockets.IsWebSocketRequest)
                     {
+                        wsok=true;
                         MainGame.StopSimulator();
                         Console.WriteLine($"[SIM]: Stop simulation");
                         context.Response.StatusCode = 200;
@@ -134,6 +145,7 @@ namespace BattleIAserver
                     Console.WriteLine("WebSocket /statsim");
                     if (context.WebSockets.IsWebSocketRequest)
                     {
+                        wsok=true;
                         MainGame.StopSimulator();
                         Console.WriteLine($"[SIM]: Ask server status ");
                         context.Response.StatusCode = 200;
@@ -148,13 +160,16 @@ namespace BattleIAserver
                         Console.WriteLine($"[SIM]: Status sent ! ");
 
                     }
+                }
                     
-                    else
+                 if (!wsok)
                     {
                         context.Response.StatusCode = 400;
                         Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
+                        await next();
+
                     }
-                }
+                
 
                   
             }); 

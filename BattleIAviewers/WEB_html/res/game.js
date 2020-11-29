@@ -59,6 +59,7 @@ socket.onopen = function(e) {
 
 socket.onmessage = function(event) {
  var  message = (event.data);
+ console.log(message);
     if (message[0] == '*') {
         pong();
         return;
@@ -90,7 +91,7 @@ socket.onclose = function(event) {
   if (event.wasClean) {
     alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
   } else {
-   let socket = new WebSocket("ws://"+server_ip+":"+server_port+"/display");
+   socket = new WebSocket("ws://"+server_ip+":"+server_port+"/display");
 
   }
   server_state="DOWN";

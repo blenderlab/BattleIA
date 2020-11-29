@@ -203,6 +203,7 @@ namespace BattleIAserver
             MapXY xy = new MapXY();
             // If no respawn, try to find an empty case :
             if (respawnList_X.Count==0){
+                BattleLogger.logger.info($"No Respawn, use a standard case ...");
                 xy = SearchEmptyCase();
                 return xy;
             }

@@ -144,6 +144,11 @@ namespace SampleBot
                                 BattleLogger.logger.info($"We are dead!");
                                 await client.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
                                 break;
+                            case Message.m_Respawn:
+                                
+                                BattleLogger.logger.info($"We are dead, But We will respawn now !!!");
+                                //await client.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+                                break;
                         }
                     } // if count > 1
                     else
