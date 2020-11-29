@@ -28,15 +28,7 @@ namespace BattleIAserver
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseDefaultFiles();
-
-            app.UseWebSockets();
-
-            // ICI on fonctionne en THREAD !
-            app.Use(async (context, next) =>
-            {
-                Console.WriteLine("New WebSocket connection");
-                // ouverture d'une websocket, un nouveau bot se connecte
+/*
                 if (context.Request.Path == "/bot")
                 {
                     Console.WriteLine("WebSocket /bot");
@@ -93,7 +85,7 @@ namespace BattleIAserver
                 }
                   
                     }); 
-
+*/
         }
     }
 }

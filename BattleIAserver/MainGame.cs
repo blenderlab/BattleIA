@@ -53,6 +53,8 @@ namespace BattleIAserver
 
         public static void LoadMap(String mapname)
         {
+
+            mapname = "Maps/" + mapname;
             // Read the file as one string.
             string[] lines = System.IO.File.ReadAllLines(@mapname);
         
@@ -610,13 +612,13 @@ namespace BattleIAserver
             ViewerPlayerCloak(x1, y1, (byte)(s & 0xFF), (byte)(s >> 8));
         }
 
-        public static void ViewerPlayerCloak(byte x1, byte y1, byte s1, byte s2)
+        public static  void ViewerPlayerCloak(byte x1, byte y1, byte s1, byte s2)
         {
             lock (lockListViewer)
             {
                 foreach (OneDisplay o in AllViewer)
                 {
-                    o.SendPlayerCloak(x1, y1, s1, s2);
+                     o.SendPlayerCloak(x1, y1, s1, s2);
                 }
             }
         }

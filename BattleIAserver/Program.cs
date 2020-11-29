@@ -8,7 +8,9 @@ using System.Diagnostics;
 namespace BattleIAserver
 {
     class Program
+
     {
+
         static void Main(string[] args)
         {
 
@@ -29,7 +31,7 @@ namespace BattleIAserver
                 MainGame.InitNewMap();
             }
         
-            Server server = new Server(new IPEndPoint(IPAddress.Parse("127.0.0.1"), MainGame.Settings.ServerPort));
+           Server server = new Server(new IPEndPoint(IPAddress.Parse("127.0.0.1"), MainGame.Settings.ServerPort));
    /*
              * Bind required events for the server
              */

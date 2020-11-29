@@ -618,7 +618,7 @@ namespace BattleIAserver
             switch (MainGame.TheMap[bot.X + x, bot.Y + y])
             {
                 case CaseState.Empty:
-                    MainGame.ViewerMovePlayer(bot.X, bot.Y, (byte)(bot.X + x), (byte)(bot.Y + y));
+                    await MainGame.ViewerMovePlayer(bot.X, bot.Y, (byte)(bot.X + x), (byte)(bot.Y + y));
                     MainGame.TheMap[bot.X, bot.Y] = CaseState.Empty;
                     bot.X = (byte)(bot.X + x);
                     bot.Y = (byte)(bot.Y + y);
@@ -627,7 +627,7 @@ namespace BattleIAserver
                     break;
                 case CaseState.Energy:
                     MainGame.ViewerClearCase((byte)(bot.X + x), (byte)(bot.Y + y));
-                    MainGame.ViewerMovePlayer(bot.X, bot.Y, (byte)(bot.X + x), (byte)(bot.Y + y));
+                    await MainGame.ViewerMovePlayer(bot.X, bot.Y, (byte)(bot.X + x), (byte)(bot.Y + y));
                     MainGame.TheMap[bot.X, bot.Y] = CaseState.Empty;
                     bot.X = (byte)(bot.X + x);
                     bot.Y = (byte)(bot.Y + y);
@@ -706,7 +706,7 @@ namespace BattleIAserver
             }
         }
 
-        private async void DoShoot(byte direction)
+        private  void DoShoot(byte direction)
         {
             MainGame.ViewerAddBullet(bot.X, bot.Y, direction, 10);
             MoveDirection dir;
