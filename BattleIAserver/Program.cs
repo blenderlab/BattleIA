@@ -23,10 +23,10 @@ namespace BattleIAserver
             {
                 Console.WriteLine("Settings not found....");
                 MainGame.Settings = new Settings();
-                string json = JsonSerializer.Serialize<Settings>(MainGame.Settings,serializeOptions);
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(MainGame.Settings, Newtonsoft.Json.Formatting.Indented);
                 File.WriteAllText(theFile, json);
             }
-            var prm =  JsonSerializer.Deserialize<Settings>(File.ReadAllText(theFile));
+            var prm = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(File.ReadAllText(theFile));
             MainGame.Settings = prm;
             if (MainGame.Settings.MapName != ""){
                 MainGame.LoadMap(MainGame.Settings.MapName);
