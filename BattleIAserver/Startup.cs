@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.WebSockets;
-using System.Threading;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.FileProviders;
+using System;
 using System.IO;
+using System.Net.WebSockets;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BattleIAserver
 {
+
     public class Startup
     {
 
@@ -25,7 +24,6 @@ namespace BattleIAserver
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services) { }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -35,20 +33,9 @@ namespace BattleIAserver
             }
 
             app.UseDefaultFiles();
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions { FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "WebPages")), RequestPath = "/WebPages" });
 
-
-            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/websockets?view=aspnetcore-2.2
-
-            // parametres pour réception des websocket
-            var webSocketOptions = new WebSocketOptions()
-            {
-                KeepAliveInterval = TimeSpan.FromSeconds(30),
-                ReceiveBufferSize = 4 * 1024
-            };
-
-            app.UseWebSockets(webSocketOptions);
+            app.UseWebSockets();
+       
 
             // ICI on fonctionne en THREAD !
             app.Use(async (context, next) =>
@@ -75,54 +62,103 @@ namespace BattleIAserver
                         Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
                     }
                 }
-                else
+                if (context.Request.Path == "/display")
                 {
-                    if (context.Request.Path == "/display")
+                    Console.WriteLine("[SOCKET] WebSocket /display");
+                    if (context.WebSockets.IsWebSocketRequest)
                     {
-                        Console.WriteLine("WebSocket /display");
-                        if (context.WebSockets.IsWebSocketRequest)
-                        {
-                            // on l'ajoute à notre simulation !
-                            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                            Console.WriteLine("New DISPLAY!");
-                            await MainGame.AddViewer(webSocket);
-
-                            Console.WriteLine($"#DISPLAY: {MainGame.AllViewer.Count}");
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 400;
-                            Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
-                        }
+                        // on l'ajoute à notre simulation !
+                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                        Console.WriteLine("[DISPLAY] New DISPLAY!");
+                        await MainGame.AddViewer(webSocket);
+                        Console.WriteLine($"[DISPLAY] number= {MainGame.AllViewer.Count}");
                     }
                     else
                     {
-                        if (context.Request.Path == "/cockpit")
-                        {
-                            Console.WriteLine("WebSocket /cockpit");
-                            if (context.WebSockets.IsWebSocketRequest)
-                            {
-                                // on l'ajoute à notre simulation !
-                                WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                                Console.WriteLine("New COCKPIT!");
-                                await MainGame.AddCockpit(webSocket);
-                                Console.WriteLine($"#COCKPIT: {MainGame.AllCockpit.Count}");
-                            }
-                            else
-                            {
-                                context.Response.StatusCode = 400;
-                                Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Unknown WebSocket: {context.Request.Path}");
-                            await next();
-                        }
+                        context.Response.StatusCode = 400;
+                        Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
                     }
                 }
-            }); // app.Use
-        } // Configure
+                if (context.Request.Path == "/cockpit")
+                {
+                    Console.WriteLine("WebSocket /cockpit");
+                    if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        // on l'ajoute à notre simulation !
+                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                        Console.WriteLine("New COCKPIT!");
+                        await MainGame.AddCockpit(webSocket);
+                        Console.WriteLine($"#COCKPIT: {MainGame.AllCockpit.Count}");
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 400;
+                        Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
+                    }
+                }
 
+                if (context.Request.Path == "/startsim")
+                {
+                    Console.WriteLine("WebSocket /startsim");
+                    if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        MainGame.RunSimulator();
+                        Console.WriteLine($"[SIM]: Start simulation");
+                        context.Response.StatusCode = 200;
+
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 400;
+                        Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
+                    }
+                }
+
+                if (context.Request.Path == "/stopsim")
+                {
+                    Console.WriteLine("WebSocket /stopsim");
+                    if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        MainGame.StopSimulator();
+                        Console.WriteLine($"[SIM]: Stop simulation");
+                        context.Response.StatusCode = 200;
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 400;
+                        Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
+                    }
+                }
+                if (context.Request.Path == "/statsim")
+                {
+                    Console.WriteLine("WebSocket /statsim");
+                    if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        MainGame.StopSimulator();
+                        Console.WriteLine($"[SIM]: Ask server status ");
+                        context.Response.StatusCode = 200;
+                        var buffer = new byte[4];
+                        buffer[0] = MainGame.isRunning();
+                        buffer[1] = (byte)MainGame.AllBot.Count;
+                        buffer[2] = (byte)MainGame.TheMap.Length;
+                        buffer[3] = (byte)MainGame.TheMap.Length;
+                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                        await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
+                        await webSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);                         
+                        Console.WriteLine($"[SIM]: Status sent ! ");
+
+                    }
+                    
+                    else
+                    {
+                        context.Response.StatusCode = 400;
+                        Console.WriteLine("WebSocket ERROR : Not a WebSocket establishment request.");
+                    }
+                }
+
+                  
+            }); 
+
+        }
     }
 }

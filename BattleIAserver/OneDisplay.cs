@@ -53,8 +53,19 @@ namespace BattleIAserver
                 if (command == "Q")
                 {
                     MustRemove = true;
-                    webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, $"[DISPLAY CLOSING] receive {command}", CancellationToken.None);
+                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, $"[DISPLAY CLOSING] receive {command}", CancellationToken.None);
                     return;
+                }
+                if (command == "*")
+                {
+                    var b = new byte[1];
+                    b[0]=(byte)'*';
+                    await webSocket.SendAsync(new ArraySegment<byte>(b, 0, 1), WebSocketMessageType.Text, true, CancellationToken.None);
+                    return;
+                }
+                if (command =="S"){
+                    MainGame.RunSimulator();
+                     return;
                 }
                 if (command != "M")
                 {
@@ -62,14 +73,15 @@ namespace BattleIAserver
                     await webSocket.CloseAsync(WebSocketCloseStatus.ProtocolError, $"[DISPLAY ERROR] Not the right answer, waiting M#, receive {command}", CancellationToken.None);
                     return;
                 }
+
                 /*if (result.Count < 1)
                 {
                     MustRemove = true;
                     await webSocket.CloseAsync(WebSocketCloseStatus.ProtocolError, "Missing data in answer 'D'", CancellationToken.None);
                     return;
                 }*/
-                await SendMapInfo();
-                await SendBotInfo();
+                //SendMapInfo();
+                //SendBotInfo();
 
                 try
                 {
@@ -103,10 +115,6 @@ namespace BattleIAserver
             for (int j = 0; j < MainGame.Settings.MapHeight; j++)
                 for (int i = 0; i < MainGame.Settings.MapWidth; i++)
                     buffer[index++] = (byte)MainGame.TheMap[i, j];
-            /*foreach(OneClient oc in MainGame.AllBot)
-            {
-                buffer[5 + oc.bot.X +( oc.bot.Y * MainGame.MapWidth)] = (byte)CaseState.Ennemy;
-            }*/
             try
             {
                 Console.WriteLine("[DISPLAY] Sending MAPINFO ...");
@@ -119,27 +127,34 @@ namespace BattleIAserver
             }
         }
 
-        public async Task SendBotInfo(){
-            var buffer = new byte[2 + MainGame.AllBot.Count*13];
+        public async Task SendBotInfo()
+        {
+            var buffer = new byte[2 + MainGame.AllBot.Count * 14];
             buffer[0] = System.Text.Encoding.ASCII.GetBytes("B")[0];
             buffer[1] = (byte)MainGame.AllBot.Count;
-  
+
+
             int index = 0;
-            foreach(OneBot oc in MainGame.AllBot)
+            foreach (OneBot oc in MainGame.AllBot)
             {
                 buffer[2+index] = (byte)oc.bot.Energy;
                 buffer[3+index] = (byte)oc.bot.X;
                 buffer[4+index] = (byte)oc.bot.Y;
                 buffer[5+index] = (byte)oc.bot.Score;
                 for (int i=0;i<9;i++){    
-                    buffer[6+index++] = (byte)oc.bot.Name[i];
+                    if (oc.bot.Name != null && i < oc.bot.Name.Length){
+                        buffer[6+i+index] = (byte)oc.bot.Name[i];
+                    } else {
+                        buffer[6+i+index] = (byte)' ';
+                    }
                 }
+                index+=13;
             }
-            
-       
+
+
             try
             {
-                Console.WriteLine("[DISPLAY] Sending BOTINFO");
+                Console.WriteLine("[DISPLAY] Sending BOTINFO...");
                 await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
             }
             catch (Exception err)

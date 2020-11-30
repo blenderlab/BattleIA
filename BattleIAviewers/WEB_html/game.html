@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge' />
+	<title>BattleIA Game Viewer</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+	<link rel="stylesheet" href="res/style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script type="text/javascript" src="res/game.js"></script>
+
+</head>
+<body>
+<div class="container">
+	<div class="columns ">
+	  <div class="column">
+		<h1>Server Status</h1>
+		<div class="content">
+			<dl class="info">
+				<dt>IP</dt>
+				<dd id='serverip'></dd>
+				<dt>Port</dt>
+				<dd id='serverport'></dd>
+				<dt>Status</dt>
+				<dd id='serverstate'></dd>
+			</dl>
+			<span id="controls">
+				<span class="button" id="startsim">Start</span>
+				<span class="button"  id="stopsim">Stop</span>
+				<span class="button"  id="getstats">Get Infos</span>
+			</span>
+		</div>
+	  </div>
+	  <div class="column">
+	    <h1>Bots List</h1>
+		<div class="content">
+			<div id="bot_list">
+				<ul id="bots">
+				</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="column is-one-third">
+	    <h1>Game Panel</h1>
+		<div class="content">
+			<canvas id="game" width="400" height="400"></canvas>
+	  	</div>
+	  </div>
+	 
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+	html{
+		background-image: url("background.jpg");
+		padding:20px;
+	}
+	#bot_list {
+		width:150px;
+		float:left;
+		height:auto;
+	}
+	.column{
+	background-image: url("background.jpg");
+	margin:20px;		
+	padding:0;	
+	box-shadow: 5px 5px 10px 0px #222;
+
+	}
+	.column h1{
+		background: #000;
+		text-align: center;
+		font-size: 2em;
+		color:#DDD;
+		font-weight:bold;
+		text-transform: uppercase;
+		
+	}
+	.column .content{
+		padding:5px;
+	}
+	.column ul{
+		padding:0;
+	}
+	#bots,#bot_list{
+    width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+}	
+	#bots li{
+		width: 100%;                 /* Set width of cards */
+ 		border: 1px solid #333;    /* Set up Border */
+	  	overflow: hidden;             /* Fixes the corners */
+		background: #FFFFFF30;
+		color:#000;
+		padding:3px;
+	}
+	#bots .name{
+		color:#696;
+		font-weight: bold;
+		text-transform: uppercase;
+
+	}
+	#bots .nrj{
+		float : left;
+		clear:right;
+		width:100%;
+	}
+	#bots .nrj span{
+		float:left;
+		width:30%;
+		color:#333;
+		text-transform: uppercase;
+
+	}
+	.progress{
+		float:left;
+		margin-top:4px;
+		width: 70%;
+	}
+	.content canvas {
+		text-align: center;
+		margin-left:auto;
+		margin-right:auto;
+
+	}
+
+
+	 dl {
+    display: flex;
+    flex-flow: row wrap;
+    border: solid #333;
+    border-width: 0px 0px 0 0;
+  }
+  dt {
+    flex-basis: 20%;
+    padding: 2px 4px;
+    background: #333;
+    text-align: right;
+    color: #fff;
+  }
+  dd {
+    flex-basis: 70%;
+    flex-grow: 1;
+    margin: 0;
+    padding: 2px 4px;
+    border-bottom: 0px solid #333;
+    color:#FFF;
+  }
+
+  #controls .button{
+  	width:50%;
+  	margin:2px 25% 2px 25%;
+  	clear:both;
+
+  }

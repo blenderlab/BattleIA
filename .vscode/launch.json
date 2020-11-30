@@ -4,14 +4,16 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/BattleIAserver/bin/Debug/netcoreapp3.1/BattleIAserver.dll",
+            "requireExactSource": false,
+            "program": "${workspaceFolder}/SampleBot/bin/Debug/netcoreapp3.1/SampleBot.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/BattleIAserver",
+            "cwd": "${workspaceFolder}/SampleBot",
             "console": "integratedTerminal",
             "stopAtEntry": false
         },

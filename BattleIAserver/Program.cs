@@ -1,8 +1,8 @@
-using System;
-using System.Diagnostics;
-using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using System;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace BattleIAserver
 {
@@ -12,27 +12,34 @@ namespace BattleIAserver
         {
 
             var currentDir = Directory.GetCurrentDirectory();
-            var pathToContentRoot = Path.Combine(currentDir, "WebPages");
-            Console.WriteLine($"ContentRoot: {pathToContentRoot}");
-
             var theFile = Path.Combine(currentDir, "settings.json");
             // création du fichier settings.json avec les valeurs par défaut
-            if(!File.Exists(theFile))
+            var serializeOptions = new JsonSerializerOptions
             {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+            if (!File.Exists(theFile))
+            {
+                Console.WriteLine("Settings not found....");
                 MainGame.Settings = new Settings();
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(MainGame.Settings, Newtonsoft.Json.Formatting.Indented);
+                string json = JsonSerializer.Serialize<Settings>(MainGame.Settings,serializeOptions);
                 File.WriteAllText(theFile, json);
             }
-            var prm = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(File.ReadAllText(theFile));
+            var prm =  JsonSerializer.Deserialize<Settings>(File.ReadAllText(theFile));
             MainGame.Settings = prm;
-            MainGame.InitNewMap();
+            if (MainGame.Settings.MapName != ""){
+                MainGame.LoadMap(MainGame.Settings.MapName);
+            } else {
+                MainGame.InitNewMap();
+            }
+                
 
             var host = new WebHostBuilder()
-            .UseContentRoot(pathToContentRoot)
             .UseKestrel()
             .UseStartup<Startup>()
             .ConfigureKestrel((context, options) => { options.ListenAnyIP(MainGame.Settings.ServerPort); })
-            .Build();                     //Modify the building per your needs
+            .Build();
 
             host.Start();                     //Start server non-blocking
 
@@ -49,15 +56,17 @@ namespace BattleIAserver
                         break;
                     case "e":
                         Console.WriteLine("Exit program");
-                        if (MainGame.AllBot.Count>0)
+                        if (MainGame.AllBot.Count > 0)
                         {
                             Console.WriteLine("Not possible, at least 1 BOT is in arena.");
-                        } else
+                        }
+                        else
                         {
-                            if(MainGame.AllViewer.Count > 0)
+                            if (MainGame.AllViewer.Count > 0)
                             {
                                 Console.WriteLine("Not possible, at least 1 VIEWER is working.");
-                            } else
+                            }
+                            else
                             {
                                 exit = true;
                             }
