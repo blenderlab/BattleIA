@@ -5,7 +5,7 @@ namespace BattleIAserver
     public class Settings
     {
         public int ServerPort = 4626;
-        //port utilisé par le serveur
+        //port utilise par le serveur
         public int DelayBetweenEachBotTurn = 100;
         public UInt16 MapWidth = 30;
         public UInt16 MapHeight = 24;
@@ -19,10 +19,10 @@ namespace BattleIAserver
         public UInt16 EnergyPodLessEvery = 5;
         public UInt16 EnergyPodLessValue = 1;
         public UInt16 EnergyPodMin = 10;
-        //config d'energie par event
+        //config d energie par event
         public bool EndlessMode = true;
         public bool autoRespawn = true;
-        //activer ou non l'auto-respawn
+        //activer ou non l auto-respawn
         [Newtonsoft.Json.JsonIgnoreAttribute]
         public UInt16 EnergyPodMax;
 
@@ -42,6 +42,6 @@ namespace BattleIAserver
         public UInt16 PointByEnnemyTouch = 80;
         public UInt16 PointByEnnemyKill = 200;
         public String MapName = "map_1.txt";
-        //points gagnés par event
+        //points gagnes par event
     }
 }
