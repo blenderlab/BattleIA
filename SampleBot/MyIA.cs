@@ -130,21 +130,29 @@ namespace SampleBot
             Astar as_Path = new Astar(map);
             Stack<GridPoint> solution = new Stack<GridPoint>();
 
-            solution = as_Path.FindPath(new Vector2(meX,meY), new Vector2(target.Position.X,target.Position.Y ));
-            // Reverse path (from start to end...)
-            Stack<GridPoint> rsolution = new Stack<GridPoint>();
-            if (solution.Count ==0){
-                return new List<MoveDirection>();
-            }
-            foreach (GridPoint p in solution){
-                Console.WriteLine($"[ROUTE] {p.Position.X},{p.Position.Y}");
-            }
-            Console.WriteLine($"[ROUTE] {meX},{meY}");
+            try {
+                solution = as_Path.FindPath(new Vector2(meX,meY), new Vector2(target.Position.X,target.Position.Y ));
+                // Reverse path (from start to end...)
+                Stack<GridPoint> rsolution = new Stack<GridPoint>();
+                if (solution.Count ==0){
+                    return new List<MoveDirection>();
+                }
+                foreach (GridPoint p in solution){
+                    Console.WriteLine($"[ROUTE] {p.Position.X},{p.Position.Y}");
+                }
+                Console.WriteLine($"[ROUTE] {meX},{meY}");
          
  
-            route = build_route(solution);
+                route = build_route(solution);
+                return route;                 
+            } 
+            catch{
+                route =new  List<MoveDirection>();
+                return route;                 
 
-             return route;
+            }
+
+             
         }
 
         List<MoveDirection> build_route(Stack<GridPoint> points)

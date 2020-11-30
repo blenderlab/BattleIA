@@ -4,6 +4,8 @@ using System.IO;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
+using System.Collections.Generic;
+
 using System.Threading.Tasks;
 
 namespace SampleBot
@@ -27,6 +29,7 @@ namespace SampleBot
             }
             var prm = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(File.ReadAllText(configFile));
             Program.settings = prm;
+            settings.BotName = CheckName(settings.BotName);
 
             BattleLogger.logger.info($"Démarrage du bot: {settings.BotName}");
 
@@ -40,6 +43,21 @@ namespace SampleBot
         private static Bot bot = new Bot();
         private static UInt16 turn = 0;
 
+        private static String CheckName(String n){
+            if (n.Length > 0 ){
+                return n;
+            } 
+            List<String> names = new List<String>();
+            List<String> surnames = new List<String>();
+            var random = new Random();
+            names.AddRange(new String[] {"Weirdy","Strange",  "Big","Fat","Small","Thin","Dangerous","Long","Tough","Enormous" });
+            surnames.AddRange(new String[] {"Cat","Tiger",  "Mouse","Rat","Beaver","Goose","Puma","Rabbit","Wolf","Fox" });
+            int indexn = random.Next(names.Count);
+            int indexs = random.Next(surnames.Count);
+            BattleLogger.logger.info($"Generating a name : {names[indexn]} {surnames[indexs]} ");
+
+            return names[indexn]+" "+surnames[indexs];
+        }
 
         static async Task DoWork()
         {
@@ -143,6 +161,11 @@ namespace SampleBot
                                 isDead = true;
                                 BattleLogger.logger.info($"We are dead!");
                                 await client.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+                                break;
+                            case Message.m_Respawn:
+                                
+                                BattleLogger.logger.info($"We are dead, But We will respawn now !!!");
+                                //await client.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
                                 break;
                         }
                     } // if count > 1

@@ -484,6 +484,7 @@ namespace BattleIAserver
                     State = BotState.Ready;
                     MainGame.ViewerMovePlayer(oldx,oldy,bot.X,bot.Y);
                     MainGame.RefreshViewer();
+                    SendChangeInfo();
                 }
             }
             catch (Exception err)
