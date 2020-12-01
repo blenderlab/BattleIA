@@ -2,6 +2,7 @@
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using BattleIA;
 
 namespace BattleIAserver
 {
@@ -114,7 +115,12 @@ namespace BattleIAserver
             int index = 5;
             for (int j = 0; j < MainGame.Settings.MapHeight; j++)
                 for (int i = 0; i < MainGame.Settings.MapWidth; i++)
-                    buffer[index++] = (byte)MainGame.TheMap[i, j];
+                    if ((byte)MainGame.TheMap[i, j] != (byte)CaseState.Ennemy){
+                        buffer[index++] = (byte)MainGame.TheMap[i, j];
+
+                    } else {
+                        buffer[index++] =(byte)CaseState.Empty;
+                    }
             try
             {
                 Console.WriteLine("[DISPLAY] Sending MAPINFO ...");
@@ -163,7 +169,27 @@ namespace BattleIAserver
                 MustRemove = true;
             }
         }
+        public async Task SendAddPlayer(byte x1, byte y1)
+        {
+            var buffer = new byte[5];
+            buffer[0] = System.Text.Encoding.ASCII.GetBytes("P")[0];
+            buffer[1] = 0;
+            buffer[2] = 0;
+            buffer[3] = x1;
+            buffer[4] = y1;
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("[DISPLAY] Sending ADD player");
+                await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+            catch (Exception err)
+            {
+                System.Diagnostics.Debug.WriteLine($"[DISPLAY ERROR] {err.Message}");
+                MustRemove = true;
+            }
 
+
+        }
 
         public async Task SendMovePlayer(byte x1, byte y1, byte x2, byte y2)
         {

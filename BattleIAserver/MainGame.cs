@@ -1,4 +1,4 @@
-﻿using BattleIA;
+using BattleIA;
 using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
@@ -465,7 +465,8 @@ namespace BattleIAserver
                 AllBot.Add(client);
             };
             // fin du ménage
-            RefreshViewer();
+            //RefreshViewer();
+            
             //Console.WriteLine("Do it!");
             foreach (OneBot o in toRemove)
                 RemoveBot(o.ClientGuid);
@@ -545,7 +546,7 @@ namespace BattleIAserver
             if (toRemove != null)
             {
                 ViewerRemovePlayer(toRemove.bot.X, toRemove.bot.Y);
-                RefreshViewer();
+                //RefreshViewer();
             }
             Console.WriteLine($"#bots: {AllBot.Count}");
         }
@@ -569,18 +570,21 @@ namespace BattleIAserver
             }
         }
 
-        public static void RefreshViewer()
+        public static void RefreshViewer(int mode=2)
         {
             lock (lockListViewer)
             {
                 foreach (OneDisplay o in AllViewer)
                 {
-                    o.SendMapInfo();
+                    if (mode==1 || mode==2) { o.SendMapInfo(); }
 
-                    o.SendBotInfo();
+                    if (mode==0 || mode==2) { 
+                        //o.SendBotInfo();
+                     }
                 }
             }
         }
+
 
         public static async Task ViewerMovePlayer(byte x1, byte y1, byte x2, byte y2)
         {
@@ -608,6 +612,17 @@ namespace BattleIAserver
                 }
             }
         }
+          public static void ViewerAddPlayer(byte x1, byte y1)
+        {
+            lock (lockListViewer)
+            {
+                foreach (OneDisplay o in AllViewer)
+                {
+                    o.SendAddPlayer(x1, y1);
+                }
+            }
+        }
+
 
         public static void ViewerClearCase(byte x1, byte y1)
         {

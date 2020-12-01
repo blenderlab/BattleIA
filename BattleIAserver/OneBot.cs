@@ -96,7 +96,7 @@ namespace BattleIAserver
                         State = BotState.Ready;
                         await SendMessage("OK");
 
-                        //MainGame.RefreshViewer();
+                        MainGame.ViewerAddPlayer(bot.X,bot.Y);
 
                         SendPositionToCockpit();
                         //await StartNewTurn();
@@ -191,7 +191,7 @@ namespace BattleIAserver
                                     await DoMove((MoveDirection)direction);
                                     State = BotState.Ready;
                                     await SendMessage("OK");
-                                    MainGame.RefreshViewer();
+                                    
 
                                     break;
                                 case BotAction.ShieldLevel: // shield
@@ -297,7 +297,7 @@ namespace BattleIAserver
                                 Console.WriteLine($"Le BOT {bot.GUID} se nomme {bot.Name}");
                                 State = BotState.Ready;
                                 //MainGame.SendCockpitInfo(bot.GUID, "N" + bot.Name);
-                                MainGame.RefreshViewer();
+                                //MainGame.RefreshViewer(0);
                                 await SendMessage("OK");
 
                                 break;
@@ -443,6 +443,7 @@ namespace BattleIAserver
                 System.Diagnostics.Debug.WriteLine($"Sending 'C' to {bot.GUID}");
                 await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Binary, true, CancellationToken.None);
                 MainGame.SendCockpitInfo(bot.GUID, new ArraySegment<byte>(buffer, 0, buffer.Length));
+                MainGame.RefreshViewer(0);
             }
             catch (Exception err)
             {
@@ -483,7 +484,6 @@ namespace BattleIAserver
                     MainGame.TheMap[oldx,oldy]=CaseState.Empty;
                     State = BotState.Ready;
                     MainGame.ViewerMovePlayer(oldx,oldy,bot.X,bot.Y);
-                    MainGame.RefreshViewer();
                     SendChangeInfo();
                 }
             }
@@ -708,7 +708,6 @@ namespace BattleIAserver
                     break;
             }
             await SendChangeInfo();
-            //MainGame.RefreshViewer();
             if (bot.Energy == 0)
             {
                 await SendDead();
