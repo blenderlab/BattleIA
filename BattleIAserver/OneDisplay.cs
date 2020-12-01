@@ -131,6 +131,7 @@ namespace BattleIAserver
                 Console.WriteLine($"[DISPLAY ERROR] {err.Message}");
                 MustRemove = true;
             }
+            SendBotInfo();
         }
 
         public async Task SendBotInfo()

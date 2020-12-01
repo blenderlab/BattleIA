@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -20,24 +20,27 @@ namespace BattleIA
     public class BattleLogger
     {
 
-        public static BattleLogger logger = new BattleLogger();
 
         DirectoryInfo logDir;
         FileInfo logFile;
         FileStream logFileS;
+            public static BattleLogger logger = new BattleLogger();
 
         private bool consoleDisplay = true;
         private static object _MessageLock = new object();
 
         public BattleLogger()
         {
+        
+
             String appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             logDir = new DirectoryInfo( appDirectory + Path.DirectorySeparatorChar + "logs");
             if (!logDir.Exists)
             {
                 Directory.CreateDirectory(logDir.FullName);
             }
-            String logFileName = DateTime.Now.ToString("MMMM-dd-yyyy") + ".log";
+            Guid g = Guid.NewGuid();
+            String logFileName = g.ToString().Substring(0,5)+" "+ DateTime.Now.ToString("MMMM-dd-yyyy") + ".log";
             logFile = new FileInfo(Path.Combine(logDir.FullName, logFileName));
 
             if(!logFile.Exists)

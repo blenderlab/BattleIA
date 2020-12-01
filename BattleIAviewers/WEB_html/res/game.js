@@ -76,6 +76,10 @@ socket.onmessage = function(event) {
 		console.log('[MSG] remove player (dead!) ');
 		removeplayer(event.data.charCodeAt(1),event.data.charCodeAt(2));
 	}
+	if (message[0]=="E"){
+		console.log('[MSG] Add  Energy ');
+		addenergy(event.data.charCodeAt(1),event.data.charCodeAt(2));
+	}
 	if (message[0]=="C"){
 		console.log('[MSG] clear case ');
 		removeplayer(event.data.charCodeAt(1),event.data.charCodeAt(2));
@@ -133,6 +137,9 @@ function removeplayer(x1,y1){
 
 function clearcase(x1,y1){
 	gameMap[y1*mapW+x1]=0;
+}
+function addenergy(x1,y1){
+	gameMap[y1*mapW+x1]=3;
 }
 
 function updateBots(message){

@@ -1,4 +1,4 @@
-﻿using BattleIA;
+using BattleIA;
 using System;
 using System.IO;
 using System.Net.WebSockets;
@@ -17,13 +17,14 @@ namespace SampleBot
 
         static void Main(string[] args)
         {
+
             BattleLogger.logger.info("Starting BattleIA");
             var currentDir = Directory.GetCurrentDirectory();
             var configFile = Path.Combine(currentDir, "settings.json");
             // création du fichier settings.json avec les valeurs par défaut
             if (!File.Exists(configFile))
             {
-                settings = new Settings();
+                 Settings settings = new Settings();
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(Program.settings, Newtonsoft.Json.Formatting.Indented);
                 File.WriteAllText(configFile, json);
             }
