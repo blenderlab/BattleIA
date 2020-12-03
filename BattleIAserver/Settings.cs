@@ -5,22 +5,25 @@ namespace BattleIAserver
     public class Settings
     {
         public int ServerPort = 4626;
+
+        //port utilise par le serveur
         public int DelayBetweenEachBotTurn = 1000;
         public UInt16 MapWidth = 30;
         public UInt16 MapHeight = 24;
         public UInt16 MapPercentWall = 4;
         public UInt16 MapPercentEnergy = 5;
-
+        //taille de la map
         public UInt16 MaxDelaySecondByTurn = 5;
-
+        //delai max en s par tour
         public UInt16 EnergyPodFrom = 1;
         public UInt16 EnergyPodTo = 50;
         public UInt16 EnergyPodLessEvery = 5;
         public UInt16 EnergyPodLessValue = 1;
         public UInt16 EnergyPodMin = 10;
-
+        //config d energie par event
         public bool EndlessMode = true;
         public bool autoRespawn = true;
+        //activer ou non l auto-respawn
         public UInt16 EnergyPodMax;
 
         public UInt16 EnergyCloakCostMultiplier = 2;
@@ -33,11 +36,13 @@ namespace BattleIAserver
         public UInt16 EnergyLostShot = 2;
         public UInt16 EnergyLostContactWall = 5;
         public UInt16 EnergyLostContactEnemy = 30;
-
+        //energie perdue par event
         public UInt16 PointByTurn = 1;
         public UInt16 PointByEnergyFound = 8;
         public UInt16 PointByEnnemyTouch = 80;
         public UInt16 PointByEnnemyKill = 200;
+        //points gagnes par event
+
         public String MapName = "map_4.txt";
 
     }
